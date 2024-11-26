@@ -12,6 +12,7 @@ import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
+import { router } from 'expo-router'
 
 const IndexPage = () => {
   const { startOAuthFlow } = useOAuth({ strategy: 'oauth_facebook' })
@@ -19,15 +20,15 @@ const IndexPage = () => {
     strategy: 'oauth_google',
   })
   const data = useQuery(api.users.getAllUsers)
-  console.log(data)
   const handleFacebookLogin = async () => {
     try {
       const { createdSessionId, setActive } = await startOAuthFlow()
+      console.log(setActive)
       if (createdSessionId) {
         setActive!({ session: createdSessionId })
       }
     } catch (err) {
-      console.error(err)
+      console.error('Error', err)
     }
   }
   const handleGoogleLogin = async () => {
