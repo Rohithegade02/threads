@@ -1,10 +1,32 @@
 import React from 'react'
-import { Stack } from 'expo-router'
+import { router, Stack } from 'expo-router'
+import { Text, TouchableOpacity } from 'react-native'
 
 const Layout = () => {
   return (
-    <Stack>
-      <Stack.Screen name='(tabs)' options={{ headerShown: true }} />
+    <Stack
+      screenOptions={{
+        contentStyle: {
+          backgroundColor: 'white',
+        },
+        headerShadowVisible: false,
+      }}
+    >
+      <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+      <Stack.Screen
+        name='(modal)/create'
+        options={{
+          presentation: 'modal',
+          title: 'New Thread',
+          headerRight: () => {
+            return (
+              <TouchableOpacity onPress={() => router.back()}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+            )
+          },
+        }}
+      />
     </Stack>
   )
 }

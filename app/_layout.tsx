@@ -1,6 +1,6 @@
 import tokenCache from '@/utils/cache'
 import { ClerkProvider, ClerkLoaded, useAuth } from '@clerk/clerk-expo'
-import { Slot } from 'expo-router'
+import { Slot, useRouter, useSegments } from 'expo-router'
 import {
   DMSans_400Regular,
   DMSans_500Medium,
@@ -33,12 +33,24 @@ const InitialLayout = () => {
     DMSans_500Medium,
     DMSans_700Bold,
   })
+  const { isSignedIn, isLoaded } = useAuth()
+  const router = useRouter()
+  const segment = useSegments()
   useEffect(() => {
     if (fontsLoaded) {
       SplashScreen.hideAsync()
     }
   }, [fontsLoaded])
 
+  useEffect(() => {
+    if (!isLoaded) return
+    const isAuthGroup = segment[0] === '(auth)'
+    if (isSignedIn && !isAuthGroup) {
+      router.replace('/(auth)/(tabs)/feed')
+    } else if (!isSignedIn && !isAuthGroup) {
+      router.replace('/(public)')
+    }
+  }, [isSignedIn])
   return <Slot />
 }
 export default function RootLayoutNav() {

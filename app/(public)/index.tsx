@@ -30,6 +30,7 @@ const IndexPage = () => {
     } catch (err) {
       console.error('Error', err)
     }
+    // router.push('/(auth)/(tabs)/profile')
   }
   const handleGoogleLogin = async () => {
     try {
