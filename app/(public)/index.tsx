@@ -10,12 +10,16 @@ import React from 'react'
 import { useOAuth } from '@clerk/clerk-expo'
 import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
+import { useQuery } from 'convex/react'
+import { api } from '@/convex/_generated/api'
 
 const IndexPage = () => {
   const { startOAuthFlow } = useOAuth({ strategy: 'oauth_facebook' })
   const { startOAuthFlow: startGoogleForm } = useOAuth({
     strategy: 'oauth_google',
   })
+  const data = useQuery(api.users.getAllUsers)
+  console.log(data)
   const handleFacebookLogin = async () => {
     try {
       const { createdSessionId, setActive } = await startOAuthFlow()
