@@ -87,6 +87,7 @@ const Layout = () => {
         name='favourite'
         options={{
           title: 'Search',
+
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
               name={focused ? 'heart' : 'heart-outline'}
@@ -100,6 +101,7 @@ const Layout = () => {
         name='profile'
         options={{
           title: 'Profile',
+          headerShown: false,
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
               name={focused ? 'person' : 'person-outline'}
