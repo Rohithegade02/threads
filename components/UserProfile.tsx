@@ -32,7 +32,15 @@ const UserProfile = ({ userId }: UserProfileProps) => {
         {isSelf && (
           <>
             <Link
-              href={`/(auth)/(modal)/edit-profile?${profile?._id ? `userId=${encodeURIComponent(profile._id)}` : ''}${profile?.imageUrl ? `&imageUrl=${encodeURIComponent(profile.imageUrl)}` : ''}${profile?.bio ? `&bioString=${encodeURIComponent(profile.bio)}` : ''}${profile?.websiteUrl ? `&linkstring=${encodeURIComponent(profile.websiteUrl)}` : ''}`}
+              href={{
+                pathname: `/(auth)/(modal)/edit-profile`,
+                params: {
+                  userId: profile?._id,
+                  imageUrl: profile?.imageUrl,
+                  bioString: profile?.bio,
+                  linkstring: profile?.websiteUrl,
+                },
+              }}
               asChild
             >
               <TouchableOpacity style={styles.button}>
