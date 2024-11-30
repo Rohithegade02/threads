@@ -5,6 +5,7 @@ import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useUserProfile } from '@/hooks/useUserProfile'
 import { Colors } from '@/constants/Colors'
+import { Link } from 'expo-router'
 
 type UserProfileProps = {
   userId?: string
@@ -26,15 +27,18 @@ const UserProfile = ({ userId }: UserProfileProps) => {
         <Image source={{ uri: profile?.imageUrl }} style={styles.image} />
       </View>
       <Text style={styles.bio}>{profile?.bio ?? 'No bio'}</Text>
-      <Text>
-        {profile?.followersCount} * {profile?.websiteUrl ?? 'No Website'}
-      </Text>
+      <Text>{profile?.websiteUrl ?? 'No Website'}</Text>
       <View style={styles.buttonRow}>
         {isSelf && (
           <>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Edit Profile</Text>
-            </TouchableOpacity>
+            <Link
+              href={`/(auth)/(modal)/edit-profile?${profile?._id ? `userId=${encodeURIComponent(profile._id)}` : ''}${profile?.imageUrl ? `&imageUrl=${encodeURIComponent(profile.imageUrl)}` : ''}${profile?.bio ? `&bioString=${encodeURIComponent(profile.bio)}` : ''}${profile?.websiteUrl ? `&linkstring=${encodeURIComponent(profile.websiteUrl)}` : ''}`}
+              asChild
+            >
+              <TouchableOpacity style={styles.button}>
+                <Text style={styles.buttonText}>Edit Profile</Text>
+              </TouchableOpacity>
+            </Link>
             <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>Share Profile</Text>
             </TouchableOpacity>

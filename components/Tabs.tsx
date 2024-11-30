@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   tab: {
     alignItems: 'center',
     flex: 1,
-    borderBottomWidth: 1,
+    borderBottomWidth: 2,
     borderBottomColor: Colors.border,
     paddingVertical: 12,
   },
@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
     color: 'black',
     fontWeight: 'bold',
   },
-
   activeTab: {
     borderBottomColor: 'black',
   },

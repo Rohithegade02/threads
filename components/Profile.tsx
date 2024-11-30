@@ -21,10 +21,7 @@ type ProfileProps = {
   showBackButton?: boolean
 }
 
-const Profile = ({
-  userId = 'jd73m06f8d42w5nc8yd0mnftes71eykf',
-  showBackButton,
-}: ProfileProps) => {
+const Profile = ({ userId, showBackButton }: ProfileProps) => {
   const { userProfile } = useUserProfile()
   const { top } = useSafeAreaInsets()
   const { signOut } = useAuth()

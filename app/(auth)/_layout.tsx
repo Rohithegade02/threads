@@ -27,6 +27,21 @@ const Layout = () => {
           },
         }}
       />
+      <Stack.Screen
+        name='(modal)/edit-profile'
+        options={{
+          presentation: 'modal',
+          title: 'Edit Profile',
+          headerTitleAlign: 'center',
+          headerLeft: () => {
+            return (
+              <TouchableOpacity onPress={() => router.dismiss()}>
+                <Text>Cancel</Text>
+              </TouchableOpacity>
+            )
+          },
+        }}
+      />
     </Stack>
   )
 }
