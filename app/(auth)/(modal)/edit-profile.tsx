@@ -12,6 +12,7 @@ import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { Colors } from '@/constants/Colors'
+import * as ImagePicker from 'expo-image-picker'
 
 const EditProfile = () => {
   const { bioString, imageUrl, linkstring, userId } = useLocalSearchParams<{
@@ -21,11 +22,13 @@ const EditProfile = () => {
     userId: string
   }>()
   const [bio, setBio] = useState(bioString)
-  const [image, setImage] = useState(imageUrl)
+  const [selectedImage, setSelectedImage] =
+    useState<ImagePicker.ImagePickerAsset | null>(null)
   const [link, setLink] = useState(linkstring)
+
   const updateUser = useMutation(api.users.updateUser)
-  console.log(link)
   const router = useRouter()
+
   const onDone = async () => {
     await updateUser({
       _id: userId as Id<'users'>,
@@ -34,7 +37,15 @@ const EditProfile = () => {
     })
     router.dismiss()
   }
-  console.log(bio)
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+    })
+    if (!result.canceled) setSelectedImage(result.assets[0])
+  }
   return (
     <View>
       <Stack.Screen
@@ -46,7 +57,13 @@ const EditProfile = () => {
           ),
         }}
       />
-      <Image source={{ uri: imageUrl }} style={styles.image} />
+      <TouchableOpacity onPress={pickImage}>
+        {selectedImage ? (
+          <Image source={{ uri: selectedImage.uri }} style={styles.image} />
+        ) : (
+          <Image source={{ uri: imageUrl }} style={styles.image} />
+        )}
+      </TouchableOpacity>
       <View style={styles.section}>
         <Text style={styles.label}>Bio</Text>
         <TextInput

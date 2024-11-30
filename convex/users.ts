@@ -57,7 +57,7 @@ export const updateUser = mutation({
     _id: v.id('users'),
     bio: v.optional(v.string()),
     websiteUrl: v.optional(v.string()),
-    profilePicture: v.optional(v.string()),
+    imageUrl: v.optional(v.string()),
     pushToken: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
