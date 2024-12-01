@@ -13,6 +13,7 @@ import { Feather, Ionicons } from '@expo/vector-icons'
 import { Colors } from '@/constants/Colors'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
+import { Link } from 'expo-router'
 
 type ThreadProps = {
   threadData: Doc<'messages'> & {
@@ -55,11 +56,15 @@ const Thread = ({ threadData }: ThreadProps) => {
             showsHorizontalScrollIndicator={false}
           >
             {mediaFiles.map((imageUrl, index) => (
-              <Image
-                source={{ uri: imageUrl }}
+              <Link
+                asChild
+                href={`(modal)/image/${encodeURIComponent(imageUrl)}`}
                 key={index}
-                style={styles.mediaImage}
-              />
+              >
+                <TouchableOpacity>
+                  <Image source={{ uri: imageUrl }} style={styles.mediaImage} />
+                </TouchableOpacity>
+              </Link>
             ))}
           </ScrollView>
         )}
