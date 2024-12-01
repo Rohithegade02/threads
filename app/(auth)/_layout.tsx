@@ -18,13 +18,7 @@ const Layout = () => {
         options={{
           presentation: 'modal',
           title: 'New Thread',
-          headerRight: () => {
-            return (
-              <TouchableOpacity onPress={() => router.back()}>
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-            )
-          },
+          headerTitleAlign: 'center',
         }}
       />
       <Stack.Screen

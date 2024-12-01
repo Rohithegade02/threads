@@ -14,11 +14,8 @@ import {
 } from '@expo-google-fonts/dm-sans'
 import { useEffect } from 'react'
 import * as SplashScreen from 'expo-splash-screen'
-import {
-  ConvexProvider,
-  ConvexProviderWithAuth,
-  ConvexReactClient,
-} from 'convex/react'
+import { ConvexReactClient } from 'convex/react'
+import { ConvexProviderWithClerk } from 'convex/react-clerk'
 import * as Sentry from '@sentry/react-native'
 
 const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
@@ -105,11 +102,11 @@ const RootLayoutNav = () => {
   }, [ref])
 
   return (
-    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+    <ClerkProvider publishableKey={publishableKey!} tokenCache={tokenCache}>
       <ClerkLoaded>
-        <ConvexProviderWithAuth useAuth={useAuth} client={convex}>
+        <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
           <InitialLayout />
-        </ConvexProviderWithAuth>
+        </ConvexProviderWithClerk>
       </ClerkLoaded>
     </ClerkProvider>
   )

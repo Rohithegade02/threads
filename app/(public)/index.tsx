@@ -10,8 +10,8 @@ import React from 'react'
 import { useOAuth } from '@clerk/clerk-expo'
 import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
-import { useQuery } from 'convex/react'
-import { api } from '@/convex/_generated/api'
+// import { useQuery } from 'convex/react'
+// import { api } from '@/convex/_generated/api'
 import { router } from 'expo-router'
 
 const IndexPage = () => {
@@ -19,7 +19,7 @@ const IndexPage = () => {
   const { startOAuthFlow: startGoogleForm } = useOAuth({
     strategy: 'oauth_google',
   })
-  const data = useQuery(api.users.getAllUsers)
+  // const data = useQuery(api.users.getAllUsers)
   const handleFacebookLogin = async () => {
     try {
       const { createdSessionId, setActive } = await startOAuthFlow()

@@ -1,10 +1,4 @@
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Id } from '@/convex/_generated/dataModel'
 import { useUserProfile } from '@/hooks/useUserProfile'
@@ -15,6 +9,7 @@ import { useAuth } from '@clerk/clerk-expo'
 import { router } from 'expo-router'
 import UserProfile from './UserProfile'
 import Tabs from './Tabs'
+import { FlashList } from '@shopify/flash-list'
 
 type ProfileProps = {
   userId?: Id<'users'>
@@ -27,7 +22,7 @@ const Profile = ({ userId, showBackButton }: ProfileProps) => {
   const { signOut } = useAuth()
   return (
     <View style={[{ paddingTop: top }, styles.container]}>
-      <FlatList
+      <FlashList
         data={[]}
         renderItem={({ item }) => <Text>Test</Text>}
         ListEmptyComponent={
