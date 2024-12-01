@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Colors } from '@/constants/Colors'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { useAuth } from '@clerk/clerk-expo'
-import { router } from 'expo-router'
+import { Link, router } from 'expo-router'
 import UserProfile from './UserProfile'
 import Tabs from './Tabs'
 import { FlashList } from '@shopify/flash-list'
@@ -37,13 +37,17 @@ const Profile = ({ userId, showBackButton }: ProfileProps) => {
         data={results}
         estimatedItemSize={122}
         renderItem={({ item }) => (
-          <Thread
-            threadData={
-              item as Doc<'messages'> & {
-                creator: Doc<'users'>
-              }
-            }
-          />
+          <Link href={`/(auth)/(tabs)/feed/${item._id}`} asChild>
+            <TouchableOpacity>
+              <Thread
+                threadData={
+                  item as Doc<'messages'> & {
+                    creator: Doc<'users'>
+                  }
+                }
+              />
+            </TouchableOpacity>
+          </Link>
         )}
         ListEmptyComponent={
           <Text style={styles.tabContentText}>

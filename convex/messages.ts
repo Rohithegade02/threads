@@ -114,3 +114,17 @@ export const likeThread = mutation({
     })
   },
 })
+export const getThreadById = query({
+  args: {
+    messageId: v.id('messages'),
+  },
+  handler: async (ctx, args) => {
+    await getCurrentUserOrThrow(ctx)
+    const thread = await ctx.db.get(args.messageId)
+    if (!thread) return null
+    const creator = await getMessageCreator(ctx, thread.userId)
+    const mediaUrls = await getMediaUrls(ctx, thread.mediaFiles)
+
+    return { ...thread, creator, mediaFiles: mediaUrls }
+  },
+})

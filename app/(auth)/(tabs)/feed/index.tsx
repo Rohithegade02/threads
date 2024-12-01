@@ -1,4 +1,9 @@
-import { RefreshControl, StyleSheet, View } from 'react-native'
+import {
+  RefreshControl,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import React, { useState } from 'react'
 import { usePaginatedQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
@@ -9,7 +14,7 @@ import ThreadComposer from '@/components/ThreadComposer'
 import { Image } from 'react-native'
 import Thread from '@/components/Thread'
 import { Doc } from '@/convex/_generated/dataModel'
-import { useNavigation } from 'expo-router'
+import { Link, useNavigation } from 'expo-router'
 import Animated, {
   runOnJS,
   useAnimatedScrollHandler,
@@ -25,7 +30,7 @@ const Feed = () => {
     api.messages.getThreads,
     {},
     {
-      initialNumItems: 1,
+      initialNumItems: 5,
     },
   )
   const [refreshing, setRefreshing] = useState<boolean>(false)
@@ -60,7 +65,7 @@ const Feed = () => {
   })
 
   const onLoadMore = () => {
-    loadMore(1)
+    loadMore(5)
   }
 
   const onRefresh = () => {
@@ -76,13 +81,17 @@ const Feed = () => {
       scrollEventThrottle={16}
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => (
-        <Thread
-          threadData={
-            item as Doc<'messages'> & {
-              creator: Doc<'users'>
-            }
-          }
-        />
+        <Link href={`/(auth)/(tabs)/feed/${item._id}`} asChild>
+          <TouchableOpacity>
+            <Thread
+              threadData={
+                item as Doc<'messages'> & {
+                  creator: Doc<'users'>
+                }
+              }
+            />
+          </TouchableOpacity>
+        </Link>
       )}
       estimatedItemSize={167}
       keyExtractor={item => item._id}

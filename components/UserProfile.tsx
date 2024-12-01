@@ -24,11 +24,15 @@ const UserProfile = ({ userId }: UserProfileProps) => {
           <Text style={styles.name}>{profile?.first_name}</Text>
           <Text style={styles.username}>@{profile?.username}</Text>
         </View>
-        <Image source={{ uri: profile?.imageUrl }} style={styles.image} />
+        <Image
+          source={{ uri: profile?.imageUrl as string }}
+          style={styles.image}
+        />
       </View>
       <Text style={styles.bio}>{profile?.bio ?? 'No bio'}</Text>
       <Text>
-        {`${profile?.followersCount} Followers`}•{'  '}
+        {`${profile?.followersCount} Followers`}
+        {'  '}•{'  '}
         {profile?.websiteUrl ?? 'No Website'}
       </Text>
       <View style={styles.buttonRow}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { router, Tabs } from 'expo-router'
+import { router, Tabs, usePathname } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Colors } from '@/constants/Colors'
@@ -13,7 +13,7 @@ const CreateTabIcon = ({
 }: {
   color: string
   size: number
-  focused: string
+  focused: boolean
 }) => {
   return (
     <View style={styles.createTabIconContainer}>
@@ -32,14 +32,19 @@ const styles = StyleSheet.create({
 
 const Layout = () => {
   const { signOut } = useAuth()
+  const pathname = usePathname()
   return (
     <Tabs
       screenOptions={{
         tabBarShowLabel: false,
         tabBarActiveTintColor: '#000',
+        tabBarStyle: pathname.includes('feed/profile/')
+          ? { display: 'none' }
+          : undefined,
       }}
     >
       <Tabs.Screen
+        name='feed'
         options={{
           headerShown: false,
           title: 'Home',
@@ -51,7 +56,6 @@ const Layout = () => {
             />
           ),
         }}
-        name='feed'
       />
       <Tabs.Screen
         name='search'

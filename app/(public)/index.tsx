@@ -20,7 +20,6 @@ const IndexPage = () => {
   const handleFacebookLogin = async () => {
     try {
       const { createdSessionId, setActive } = await startOAuthFlow()
-      console.log(setActive)
       if (createdSessionId) {
         setActive!({ session: createdSessionId })
       }

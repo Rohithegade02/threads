@@ -13,7 +13,7 @@ import { Feather, Ionicons } from '@expo/vector-icons'
 import { Colors } from '@/constants/Colors'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { Link } from 'expo-router'
+import { Link, RelativePathString } from 'expo-router'
 
 type ThreadProps = {
   threadData: Doc<'messages'> & {
@@ -37,7 +37,16 @@ const Thread = ({ threadData }: ThreadProps) => {
       <View style={{ flex: 1, marginLeft: 6 }}>
         <View style={styles.header}>
           <View style={styles.headerText}>
-            <Text style={styles.headerTextName}>{creator.first_name}</Text>
+            <Link
+              href={
+                `/feed/profile/${encodeURIComponent(creator._id)}` as RelativePathString
+              }
+              asChild
+            >
+              <Text style={styles.headerTextName}>
+                {creator.first_name} {creator.last_name}
+              </Text>
+            </Link>
             <Text style={styles.timestamp}>
               {formatTime(threadData._creationTime)}
             </Text>
@@ -58,7 +67,9 @@ const Thread = ({ threadData }: ThreadProps) => {
             {mediaFiles.map((imageUrl, index) => (
               <Link
                 asChild
-                href={`(modal)/image/${encodeURIComponent(imageUrl)}`}
+                href={
+                  `(modal)/image/${encodeURIComponent(imageUrl)}` as RelativePathString
+                }
                 key={index}
               >
                 <TouchableOpacity>
