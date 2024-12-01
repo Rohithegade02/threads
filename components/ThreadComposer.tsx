@@ -109,126 +109,155 @@ const ThreadComposer = ({
     return storageId
   }
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+    <TouchableOpacity
+      style={[
+        { flex: 1 },
+        isPreview && {
+          pointerEvents: 'box-only',
+          right: 0,
+          top: 0,
+          bottom: 0,
+          height: 100,
+        },
+      ]}
+      onPress={() => router.push('/(auth)/(modal)/create')}
     >
-      <Stack.Screen
-        options={{
-          headerRight: () => {
-            return (
-              <TouchableOpacity onPress={cancelModal}>
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-            )
-          },
-        }}
-      />
-      <View style={{ flex: 1 }}>
-        <View style={styles.topRow}>
-          {userProfile && (
-            <Image
-              source={{ uri: userProfile?.imageUrl ?? '' }}
-              style={styles.avatar}
-            />
-          )}
-          <View style={styles.centerContainer}>
-            <Text style={styles.name}>
-              {userProfile?.first_name} {userProfile?.last_name}
-            </Text>
-            <TextInput
-              style={styles.input}
-              placeholder={isReply ? 'Reply to thread' : `What's new ?`}
-              value={threadContent}
-              onChangeText={setThreadContent}
-              multiline
-              autoFocus={!isPreview}
-              inputAccessoryViewID={inputAccessoryViewID}
-            />
-            {mediaFiles.length > 0 && (
-              <ScrollView horizontal>
-                {mediaFiles.map((file, index) => (
-                  <View style={styles.mediaContainer} key={index}>
-                    <Image
-                      source={{ uri: file.uri }}
-                      style={styles.mediaImage}
-                    />
-                    <TouchableOpacity
-                      style={styles.deleteIconContainer}
-                      onPress={() => {
-                        setMediaFiles(mediaFiles.filter((_, i) => i !== index))
-                      }}
-                    >
-                      <Ionicons name='close' size={16} color={'#fff'} />
-                    </TouchableOpacity>
-                  </View>
-                ))}
-              </ScrollView>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+      >
+        <Stack.Screen
+          options={{
+            headerRight: () => {
+              return (
+                <TouchableOpacity onPress={cancelModal}>
+                  <Text>Cancel</Text>
+                </TouchableOpacity>
+              )
+            },
+          }}
+        />
+        <View style={{ flex: 1 }}>
+          <View style={styles.topRow}>
+            {userProfile && (
+              <Image
+                source={{ uri: userProfile?.imageUrl ?? '' }}
+                style={styles.avatar}
+              />
             )}
-            <View style={styles.iconRow}>
-              <TouchableOpacity
-                style={styles.iconButton}
-                onPress={() => selectImage('library')}
-              >
-                <Ionicons
-                  name='images-outline'
-                  size={24}
-                  color={Colors.border}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.iconButton}
-                onPress={() => selectImage('camera')}
-              >
-                <Ionicons
-                  name='camera-outline'
-                  size={24}
-                  color={Colors.border}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton}>
-                <MaterialIcons name='gif' size={24} color={Colors.border} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton}>
-                <Ionicons name='mic-outline' size={24} color={Colors.border} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton}>
-                <FontAwesome6 name='hashtag' size={24} color={Colors.border} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.iconButton}>
-                <Ionicons
-                  name='stats-chart-outline'
-                  size={24}
-                  color={Colors.border}
-                />
-              </TouchableOpacity>
+            <View style={styles.centerContainer}>
+              <Text style={styles.name}>
+                {userProfile?.first_name} {userProfile?.last_name}
+              </Text>
+              <TextInput
+                style={styles.input}
+                placeholder={isReply ? 'Reply to thread' : `What's new ?`}
+                value={threadContent}
+                onChangeText={setThreadContent}
+                multiline
+                autoFocus={!isPreview}
+                inputAccessoryViewID={inputAccessoryViewID}
+              />
+              {mediaFiles.length > 0 && (
+                <ScrollView horizontal>
+                  {mediaFiles.map((file, index) => (
+                    <View style={styles.mediaContainer} key={index}>
+                      <Image
+                        source={{ uri: file.uri }}
+                        style={styles.mediaImage}
+                      />
+                      <TouchableOpacity
+                        style={styles.deleteIconContainer}
+                        onPress={() => {
+                          setMediaFiles(
+                            mediaFiles.filter((_, i) => i !== index),
+                          )
+                        }}
+                      >
+                        <Ionicons name='close' size={16} color={'#fff'} />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </ScrollView>
+              )}
+              <View style={styles.iconRow}>
+                <TouchableOpacity
+                  style={styles.iconButton}
+                  onPress={() => selectImage('library')}
+                >
+                  <Ionicons
+                    name='images-outline'
+                    size={24}
+                    color={Colors.border}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.iconButton}
+                  onPress={() => selectImage('camera')}
+                >
+                  <Ionicons
+                    name='camera-outline'
+                    size={24}
+                    color={Colors.border}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.iconButton}>
+                  <MaterialIcons name='gif' size={24} color={Colors.border} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.iconButton}>
+                  <Ionicons
+                    name='mic-outline'
+                    size={24}
+                    color={Colors.border}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.iconButton}>
+                  <FontAwesome6
+                    name='hashtag'
+                    size={24}
+                    color={Colors.border}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.iconButton}>
+                  <Ionicons
+                    name='stats-chart-outline'
+                    size={24}
+                    color={Colors.border}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                {
+                  opacity: isPreview ? 0 : 1,
+                },
+              ]}
+              onPress={removeThread}
+            >
+              <Ionicons name='close' size={24} color={Colors.border} />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              {
-                opacity: isPreview ? 0 : 1,
-              },
-            ]}
-            onPress={removeThread}
-          >
-            <Ionicons name='close' size={24} color={Colors.border} />
-          </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.keyboardAccessory}>
-        <Text style={styles.keyboardAccessorytext}>
-          {isReply
-            ? 'Everyone can reply and quote'
-            : 'Profiles that you follow can reply and quote'}
-        </Text>
-        <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
-          <Text style={styles.submitButtonText}>Post</Text>
-        </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+        {!isPreview && (
+          <View style={styles.keyboardAccessory}>
+            <Text style={styles.keyboardAccessorytext}>
+              {isReply
+                ? 'Everyone can reply and quote'
+                : 'Profiles that you follow can reply and quote'}
+            </Text>
+            <TouchableOpacity
+              onPress={handleSubmit}
+              style={styles.submitButton}
+            >
+              <Text style={styles.submitButtonText}>Post</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </KeyboardAvoidingView>
+    </TouchableOpacity>
   )
 }
 
