@@ -3,6 +3,7 @@ import {
   Image,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -17,6 +18,8 @@ import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Colors } from '@/constants/Colors'
 import { FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons'
+import * as ImagePicker from 'expo-image-picker'
+import { generateUploadUrl } from '@/convex/users'
 
 type ThreadComposerProps = {
   isPreview?: boolean
@@ -33,25 +36,29 @@ const ThreadComposer = ({
   const inputAccessoryViewID = 'uniqueId'
   const [threadContent, setThreadContent] = useState('')
   const { userProfile } = useUserProfile()
-  const [mediaFiles, setMediaFiles] = useState<string[]>([])
+  const [mediaFiles, setMediaFiles] = useState<ImagePicker.ImagePickerAsset[]>(
+    [],
+  )
   const addThread = useMutation(api.messages.addThreadMessage)
+  const generateUploadUrl = useMutation(api.messages.generateUploadUrl)
 
   const handleSubmit = async () => {
+    const mediaIds = await Promise.all(mediaFiles.map(uploadMediaFile))
     addThread({
       threadId,
       content: threadContent,
+      mediaFiles: mediaIds,
     })
     setThreadContent('')
     setMediaFiles([])
     router.dismiss()
   }
+
   const removeThread = useCallback(() => {
     setThreadContent('')
     setMediaFiles([])
   }, [])
-  const selectImage = (type: 'library' | 'camera') => {
-    console.log(type)
-  }
+
   const cancelModal = () => {
     setThreadContent('')
     Alert.alert('Discard thread ?', '', [
@@ -65,6 +72,41 @@ const ThreadComposer = ({
         style: 'cancel',
       },
     ])
+  }
+
+  const selectImage = async (source: 'camera' | 'library') => {
+    const options: ImagePicker.ImagePickerOptions = {
+      allowsEditing: true,
+      aspect: [4, 3],
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    }
+
+    let result
+
+    if (source === 'camera') {
+      const permission = await ImagePicker.requestCameraPermissionsAsync()
+
+      result = await ImagePicker.launchCameraAsync(options)
+    } else {
+      result = await ImagePicker.launchImageLibraryAsync(options)
+    }
+
+    if (!result.canceled) {
+      setMediaFiles([result.assets[0], ...mediaFiles])
+    }
+  }
+
+  const uploadMediaFile = async (image: ImagePicker.ImagePickerAsset) => {
+    const postUrl = await generateUploadUrl()
+    const response = await fetch(image!.uri)
+    const blob = await response.blob()
+    const result = await fetch(postUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': image!.mimeType! },
+      body: blob,
+    })
+    const { storageId } = await result.json()
+    return storageId
   }
   return (
     <KeyboardAvoidingView
@@ -104,6 +146,26 @@ const ThreadComposer = ({
               autoFocus={!isPreview}
               inputAccessoryViewID={inputAccessoryViewID}
             />
+            {mediaFiles.length > 0 && (
+              <ScrollView horizontal>
+                {mediaFiles.map((file, index) => (
+                  <View style={styles.mediaContainer} key={index}>
+                    <Image
+                      source={{ uri: file.uri }}
+                      style={styles.mediaImage}
+                    />
+                    <TouchableOpacity
+                      style={styles.deleteIconContainer}
+                      onPress={() => {
+                        setMediaFiles(mediaFiles.filter((_, i) => i !== index))
+                      }}
+                    >
+                      <Ionicons name='close' size={16} color={'#fff'} />
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </ScrollView>
+            )}
             <View style={styles.iconRow}>
               <TouchableOpacity
                 style={styles.iconButton}
@@ -228,5 +290,24 @@ const styles = StyleSheet.create({
   submitButtonText: {
     fontWeight: 'bold',
     color: '#fff',
+  },
+  mediaImage: {
+    width: 100,
+    height: 200,
+    borderRadius: 6,
+    marginRight: 10,
+    marginTop: 10,
+  },
+  mediaContainer: {
+    marginRight: 10,
+    marginTop: 10,
+  },
+  deleteIconContainer: {
+    position: 'absolute',
+    top: 15,
+    right: 15,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 4,
+    borderRadius: 12,
   },
 })
