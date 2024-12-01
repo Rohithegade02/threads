@@ -27,7 +27,10 @@ const UserProfile = ({ userId }: UserProfileProps) => {
         <Image source={{ uri: profile?.imageUrl }} style={styles.image} />
       </View>
       <Text style={styles.bio}>{profile?.bio ?? 'No bio'}</Text>
-      <Text>{profile?.websiteUrl ?? 'No Website'}</Text>
+      <Text>
+        {`${profile?.followersCount} Followers`}•{'  '}
+        {profile?.websiteUrl ?? 'No Website'}
+      </Text>
       <View style={styles.buttonRow}>
         {isSelf && (
           <>

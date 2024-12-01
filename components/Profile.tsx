@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { Id } from '@/convex/_generated/dataModel'
+import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useUserProfile } from '@/hooks/useUserProfile'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Colors } from '@/constants/Colors'
@@ -10,6 +10,9 @@ import { router } from 'expo-router'
 import UserProfile from './UserProfile'
 import Tabs from './Tabs'
 import { FlashList } from '@shopify/flash-list'
+import { api } from '@/convex/_generated/api'
+import { usePaginatedQuery } from 'convex/react'
+import Thread from './Thread'
 
 type ProfileProps = {
   userId?: Id<'users'>
@@ -20,11 +23,28 @@ const Profile = ({ userId, showBackButton }: ProfileProps) => {
   const { userProfile } = useUserProfile()
   const { top } = useSafeAreaInsets()
   const { signOut } = useAuth()
+
+  const { results, loadMore, status } = usePaginatedQuery(
+    api.messages.getThreads,
+    { userId: userId || userProfile?._id },
+    {
+      initialNumItems: 5,
+    },
+  )
   return (
     <View style={[{ paddingTop: top }, styles.container]}>
       <FlashList
-        data={[]}
-        renderItem={({ item }) => <Text>Test</Text>}
+        data={results}
+        estimatedItemSize={122}
+        renderItem={({ item }) => (
+          <Thread
+            threadData={
+              item as Doc<'messages'> & {
+                creator: Doc<'users'>
+              }
+            }
+          />
+        )}
         ListEmptyComponent={
           <Text style={styles.tabContentText}>
             You haven&apos;t posted anything yet

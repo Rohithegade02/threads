@@ -1,4 +1,4 @@
-import { Button, RefreshControl, StyleSheet, Text, View } from 'react-native'
+import { RefreshControl, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 import { usePaginatedQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
@@ -9,20 +9,58 @@ import ThreadComposer from '@/components/ThreadComposer'
 import { Image } from 'react-native'
 import Thread from '@/components/Thread'
 import { Doc } from '@/convex/_generated/dataModel'
+import { useNavigation } from 'expo-router'
+import Animated, {
+  runOnJS,
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated'
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
+import { useIsFocused } from '@react-navigation/native'
+
+const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
 
 const Feed = () => {
   const { results, loadMore, status } = usePaginatedQuery(
     api.messages.getThreads,
     {},
     {
-      initialNumItems: 5,
+      initialNumItems: 1,
     },
   )
   const [refreshing, setRefreshing] = useState<boolean>(false)
   const { top } = useSafeAreaInsets()
 
+  //Animation
+  const navigation = useNavigation()
+  const scrollOffset = useSharedValue(0)
+  const tabBarHeight = useBottomTabBarHeight()
+  const isFocused = useIsFocused()
+
+  const updateTabBar = () => {
+    let newMarginBottom = 0
+    if (scrollOffset.value >= 0 && scrollOffset.value <= tabBarHeight) {
+      newMarginBottom = -scrollOffset.value
+    } else if (scrollOffset.value > tabBarHeight) {
+      newMarginBottom = -tabBarHeight
+    }
+    navigation.getParent()?.setOptions({
+      tabBarStyle: {
+        marginBottom: newMarginBottom,
+      },
+    })
+  }
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: event => {
+      if (isFocused) {
+        scrollOffset.value = event.contentOffset.y
+        runOnJS(updateTabBar)()
+      }
+    },
+  })
+
   const onLoadMore = () => {
-    loadMore(5)
+    loadMore(1)
   }
 
   const onRefresh = () => {
@@ -32,8 +70,10 @@ const Feed = () => {
     }, 2000)
   }
   return (
-    <FlashList
+    <AnimatedFlashList
       data={results}
+      onScroll={scrollHandler}
+      scrollEventThrottle={16}
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => (
         <Thread
@@ -44,6 +84,7 @@ const Feed = () => {
           }
         />
       )}
+      estimatedItemSize={167}
       keyExtractor={item => item._id}
       onEndReachedThreshold={0.5}
       onEndReached={onLoadMore}

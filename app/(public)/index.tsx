@@ -10,9 +10,6 @@ import React from 'react'
 import { useOAuth } from '@clerk/clerk-expo'
 import { Colors } from '@/constants/Colors'
 import { Ionicons } from '@expo/vector-icons'
-// import { useQuery } from 'convex/react'
-// import { api } from '@/convex/_generated/api'
-import { router } from 'expo-router'
 
 const IndexPage = () => {
   const { startOAuthFlow } = useOAuth({ strategy: 'oauth_facebook' })

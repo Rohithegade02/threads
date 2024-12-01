@@ -1,9 +1,18 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 import React from 'react'
 import { Doc } from '@/convex/_generated/dataModel'
 import { formatTime } from '@/utils/dateTime'
 import { Feather, Ionicons } from '@expo/vector-icons'
 import { Colors } from '@/constants/Colors'
+import { useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
 
 type ThreadProps = {
   threadData: Doc<'messages'> & {
@@ -19,6 +28,8 @@ const Thread = ({ threadData }: ThreadProps) => {
     creator,
     content,
   } = threadData
+
+  const likeThread = useMutation(api.messages.likeThread)
   return (
     <View style={styles.container}>
       <Image source={{ uri: creator.imageUrl }} style={styles.avatar} />
@@ -37,10 +48,25 @@ const Thread = ({ threadData }: ThreadProps) => {
           />
         </View>
         <Text style={styles.contentText}>{content}</Text>
+        {mediaFiles && mediaFiles.length > 0 && (
+          <ScrollView
+            contentContainerStyle={styles.mediaContainer}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          >
+            {mediaFiles.map((imageUrl, index) => (
+              <Image
+                source={{ uri: imageUrl }}
+                key={index}
+                style={styles.mediaImage}
+              />
+            ))}
+          </ScrollView>
+        )}
         <View style={styles.actions}>
           <TouchableOpacity
             style={styles.actionButton}
-            // onPress={() => likeThread({ messageId: thread._id })}
+            onPress={() => likeThread({ threadId: threadData._id })}
           >
             <Ionicons name='heart-outline' size={24} color='black' />
             <Text style={styles.actionText}>{likeCount}</Text>
@@ -111,5 +137,14 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: 12,
+  },
+  mediaImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 12,
+    marginBottom: 10,
+  },
+  mediaContainer: {
+    gap: 12,
   },
 })

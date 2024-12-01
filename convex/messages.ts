@@ -53,10 +53,12 @@ export const getThreads = query({
     const threadsWithMedia = await Promise.all(
       threads.page.map(async thread => {
         const creator = await getMessageCreator(ctx, thread.userId)
+        const mediaUrls = await getMediaUrls(ctx, thread.mediaFiles)
 
         return {
           ...thread,
           creator,
+          mediaFiles: mediaUrls,
         }
       }),
     )
@@ -81,3 +83,34 @@ const getMessageCreator = async (ctx: QueryCtx, userId: Id<'users'>) => {
     imageUrl: url,
   }
 }
+
+const getMediaUrls = async (
+  ctx: QueryCtx,
+  mediaFiles: string[] | undefined,
+) => {
+  if (!mediaFiles || mediaFiles.length === 0) {
+    return []
+  }
+  return await Promise.all(
+    mediaFiles.map(async file => {
+      let url: any = file
+      if (!file.startsWith('http')) {
+        url = await ctx.storage.getUrl(file as Id<'_storage'>)
+      }
+      return url
+    }),
+  )
+}
+export const likeThread = mutation({
+  args: {
+    threadId: v.id('messages'),
+  },
+  handler: async (ctx, args) => {
+    await getCurrentUserOrThrow(ctx)
+    const message = await ctx.db.get(args.threadId)
+
+    await ctx.db.patch(args.threadId, {
+      likeCount: (message?.likeCount || 0) + 1,
+    })
+  },
+})
