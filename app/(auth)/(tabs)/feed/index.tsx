@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { usePaginatedQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { FlashList } from '@shopify/flash-list'
@@ -14,7 +14,12 @@ import ThreadComposer from '@/components/ThreadComposer'
 import { Image } from 'react-native'
 import Thread from '@/components/Thread'
 import { Doc } from '@/convex/_generated/dataModel'
-import { Link, useNavigation } from 'expo-router'
+import {
+  Link,
+  RelativePathString,
+  useNavigation,
+  usePathname,
+} from 'expo-router'
 import Animated, {
   runOnJS,
   useAnimatedScrollHandler,
@@ -26,7 +31,7 @@ import { useIsFocused } from '@react-navigation/native'
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
 
 const Feed = () => {
-  const { results, loadMore, status } = usePaginatedQuery(
+  const { results, loadMore } = usePaginatedQuery(
     api.messages.getThreads,
     {},
     {
@@ -35,12 +40,22 @@ const Feed = () => {
   )
   const [refreshing, setRefreshing] = useState<boolean>(false)
   const { top } = useSafeAreaInsets()
-
+  const pathname = usePathname()
   //Animation
   const navigation = useNavigation()
   const scrollOffset = useSharedValue(0)
   const tabBarHeight = useBottomTabBarHeight()
   const isFocused = useIsFocused()
+
+  useEffect(() => {
+    if (pathname !== '/feed') {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: {
+          marginBottom: 0,
+        },
+      })
+    }
+  }, [pathname, navigation])
 
   const updateTabBar = () => {
     let newMarginBottom = 0
@@ -81,7 +96,10 @@ const Feed = () => {
       scrollEventThrottle={16}
       showsVerticalScrollIndicator={false}
       renderItem={({ item }) => (
-        <Link href={`/(auth)/(tabs)/feed/${item._id}`} asChild>
+        <Link
+          href={`/(auth)/(tabs)/feed/${item._id}` as RelativePathString}
+          asChild
+        >
           <TouchableOpacity>
             <Thread
               threadData={
@@ -94,7 +112,7 @@ const Feed = () => {
         </Link>
       )}
       estimatedItemSize={167}
-      keyExtractor={item => item._id}
+      keyExtractor={(item: any) => item._id}
       onEndReachedThreshold={0.5}
       onEndReached={onLoadMore}
       refreshControl={
