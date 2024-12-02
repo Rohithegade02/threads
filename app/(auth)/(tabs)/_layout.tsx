@@ -1,6 +1,6 @@
 import React from 'react'
 import { router, Tabs, usePathname } from 'expo-router'
-import { Ionicons } from '@expo/vector-icons'
+import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Colors } from '@/constants/Colors'
 import { useAuth } from '@clerk/clerk-expo'
@@ -25,8 +25,14 @@ const CreateTabIcon = ({
 const styles = StyleSheet.create({
   createTabIconContainer: {
     backgroundColor: Colors.itemBackground,
-    padding: 2,
+    paddingVertical: 6,
+    marginTop: 8,
+    paddingHorizontal: 12,
+    flexDirection: 'row',
     borderRadius: 8,
+    height: 40,
+    width: 50,
+    alignSelf: 'center',
   },
 })
 
@@ -49,10 +55,10 @@ const Layout = () => {
           headerShown: false,
           title: 'Home',
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? 'home' : 'home-outline'}
+            <MaterialIcons
+              name={focused ? 'home-filled' : 'home'}
               color={color}
-              size={size}
+              size={28}
             />
           ),
         }}
@@ -66,7 +72,7 @@ const Layout = () => {
             <Ionicons
               name={focused ? 'search' : 'search-outline'}
               color={color}
-              size={size}
+              size={28}
             />
           ),
         }}
@@ -96,7 +102,7 @@ const Layout = () => {
             <Ionicons
               name={focused ? 'heart' : 'heart-outline'}
               color={color}
-              size={size}
+              size={28}
             />
           ),
         }}
@@ -110,7 +116,7 @@ const Layout = () => {
             <Ionicons
               name={focused ? 'person' : 'person-outline'}
               color={color}
-              size={size}
+              size={28}
             />
           ),
           headerRight: () => {

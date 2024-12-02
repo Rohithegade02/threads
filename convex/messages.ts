@@ -13,13 +13,20 @@ export const addThreadMessage = mutation({
   },
   handler: async (ctx, args) => {
     const user = await getCurrentUserOrThrow(ctx)
-    return await ctx.db.insert('messages', {
+    const message = await ctx.db.insert('messages', {
       ...args,
       userId: user._id,
       likeCount: 0,
       commentCount: 0,
       retweetCount: 0,
     })
+    if (args.threadId) {
+      const originalThread = await ctx.db.get(args.threadId)
+      await ctx.db.patch(args.threadId, {
+        commentCount: (originalThread?.commentCount || 0) + 1,
+      })
+    }
+    return message
   },
 })
 
@@ -126,5 +133,32 @@ export const getThreadById = query({
     const mediaUrls = await getMediaUrls(ctx, thread.mediaFiles)
 
     return { ...thread, creator, mediaFiles: mediaUrls }
+  },
+})
+
+export const getThreadComments = query({
+  args: {
+    messageId: v.id('messages'),
+  },
+  handler: async (ctx, args) => {
+    const comments = await ctx.db
+      .query('messages')
+      .filter(q => q.eq(q.field('threadId'), args.messageId))
+      .order('desc')
+      .collect()
+
+    const messageswithCreator = await Promise.all(
+      comments.map(async thread => {
+        const creator = await getMessageCreator(ctx, thread.userId)
+        const mediaUrls = await getMediaUrls(ctx, thread.mediaFiles)
+
+        return {
+          ...thread,
+          creator,
+          mediaFiles: mediaUrls,
+        }
+      }),
+    )
+    return messageswithCreator
   },
 })

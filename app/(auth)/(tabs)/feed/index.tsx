@@ -118,7 +118,7 @@ const Feed = () => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
-      contentContainerStyle={{ paddingVertical: top }}
+      contentContainerStyle={{ paddingVertical: top, backgroundColor: '#fff' }}
       ItemSeparatorComponent={() => (
         <View
           style={{

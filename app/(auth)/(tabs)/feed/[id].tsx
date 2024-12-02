@@ -15,6 +15,7 @@ import { Doc, Id } from '@/convex/_generated/dataModel'
 import { Colors } from '@/constants/Colors'
 import { useUserProfile } from '@/hooks/useUserProfile'
 import { Image } from 'react-native'
+import Comments from '@/components/Comments'
 
 const Page = () => {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -32,6 +33,7 @@ const Page = () => {
         ) : (
           <ActivityIndicator />
         )}
+        <Comments messageId={id as Id<'messages'>} />
       </ScrollView>
       <View style={styles.border} />
       <Link href={`/(auth)/(modal)/reply/${id}` as RelativePathString} asChild>
