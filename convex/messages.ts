@@ -3,6 +3,7 @@ import { mutation, query, QueryCtx } from './_generated/server'
 import { getCurrentUserOrThrow } from './users'
 import { paginationOptsValidator } from 'convex/server'
 import { Id } from './_generated/dataModel'
+import { internal } from './_generated/api'
 
 export const addThreadMessage = mutation({
   args: {
@@ -24,6 +25,16 @@ export const addThreadMessage = mutation({
       const originalThread = await ctx.db.get(args.threadId)
       await ctx.db.patch(args.threadId, {
         commentCount: (originalThread?.commentCount || 0) + 1,
+      })
+      const user = await ctx.db.get(originalThread?.userId as Id<'users'>)
+      const pushToken = user?.pushToken
+      // if (!pushToken) return
+      console.log(pushToken)
+      await ctx.scheduler.runAfter(1000, internal.push.sendPushNotifications, {
+        pushToken: pushToken!,
+        threadId: args.threadId,
+        messageTitle: 'New comment',
+        messageBody: args.content,
       })
     }
     return message
