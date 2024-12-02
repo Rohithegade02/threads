@@ -39,3 +39,4 @@ app-example
 
 .env.local
 ./android
+google-services.json

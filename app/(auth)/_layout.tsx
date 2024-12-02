@@ -1,9 +1,12 @@
 import React from 'react'
-import { router, Stack } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { Text, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
+import { usePush } from '@/hooks/usePush'
 
 const Layout = () => {
+  const router = useRouter()
+  usePush()
   return (
     <Stack
       screenOptions={{
