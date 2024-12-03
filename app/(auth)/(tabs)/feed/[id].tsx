@@ -33,6 +33,12 @@ const Page = () => {
         ) : (
           <ActivityIndicator />
         )}
+        <View
+          style={{
+            height: StyleSheet.hairlineWidth,
+            backgroundColor: '#4d4d4d',
+          }}
+        />{' '}
         <Comments messageId={id as Id<'messages'>} />
       </ScrollView>
       <View style={styles.border} />
@@ -42,7 +48,7 @@ const Page = () => {
             source={{ uri: userProfile?.imageUrl as string }}
             style={styles.profileImage}
           />
-          <Text>
+          <Text style={{ color: '#f2f2f2' }}>
             Reply to {thread?.creator?.first_name} {thread?.creator?.last_name}
           </Text>
         </TouchableOpacity>
@@ -55,12 +61,12 @@ export default Page
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     flex: 1,
   },
   border: {
     height: StyleSheet.hairlineWidth,
-    backgroundColor: Colors.border,
+    backgroundColor: '#505050',
     marginVertical: 2,
   },
   replyButton: {
@@ -70,7 +76,7 @@ const styles = StyleSheet.create({
     gap: 10,
     borderRadius: 100,
     margin: 10,
-    backgroundColor: Colors.itemBackground,
+    backgroundColor: '#505050',
   },
   profileImage: {
     width: 25,

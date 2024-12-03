@@ -30,7 +30,7 @@ const UserProfile = ({ userId }: UserProfileProps) => {
         />
       </View>
       <Text style={styles.bio}>{profile?.bio ?? 'No bio'}</Text>
-      <Text>
+      <Text style={{ color: '#f2f3f5' }}>
         {`${profile?.followersCount} Followers`}
         {'  '}•{'  '}
         {profile?.websiteUrl ?? 'No Website'}
@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#f2f3f5',
   },
   profileTextContainer: {
     gap: 6,
@@ -106,6 +107,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 16,
     marginBottom: 16,
+    color: '#f2f3f5',
   },
   buttonRow: {
     flexDirection: 'row',
@@ -120,11 +122,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: '#4d4d4d',
     borderRadius: 5,
   },
   buttonText: {
     fontWeight: 'bold',
+    color: '#d1d1d1',
   },
   fullButton: {
     flex: 1,

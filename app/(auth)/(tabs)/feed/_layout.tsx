@@ -18,6 +18,9 @@ const Layout = () => {
           headerRight: () => (
             <Ionicons name='notifications-outline' size={24} color={'black'} />
           ),
+          headerStyle: {
+            backgroundColor: 'black',
+          },
         }}
       />
     </Stack>

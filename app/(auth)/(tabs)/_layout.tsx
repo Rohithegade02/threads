@@ -24,7 +24,7 @@ const CreateTabIcon = ({
 
 const styles = StyleSheet.create({
   createTabIconContainer: {
-    backgroundColor: Colors.itemBackground,
+    backgroundColor: '#1e1e1e',
     paddingVertical: 6,
     marginTop: 8,
     paddingHorizontal: 12,
@@ -43,10 +43,21 @@ const Layout = () => {
     <Tabs
       screenOptions={{
         tabBarShowLabel: false,
-        tabBarActiveTintColor: '#000',
+        tabBarActiveTintColor: '#fff',
+        tabBarInactiveBackgroundColor: '#101010',
+        tabBarActiveBackgroundColor: '#101010',
+
+        headerStyle: {
+          backgroundColor: '#101010',
+        },
+        headerTintColor: '#fff',
+
         tabBarStyle: pathname.includes('feed/profile/')
           ? { display: 'none' }
-          : undefined,
+          : {
+              backgroundColor: '#101010',
+              borderTopWidth: 0,
+            },
       }}
     >
       <Tabs.Screen
@@ -54,7 +65,7 @@ const Layout = () => {
         options={{
           headerShown: false,
           title: 'Home',
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color = '#535353', size, focused }) => (
             <MaterialIcons
               name={focused ? 'home-filled' : 'home'}
               color={color}
@@ -68,7 +79,12 @@ const Layout = () => {
         options={{
           headerShown: false,
           title: 'Search',
-          tabBarIcon: ({ color, size, focused }) => (
+          headerTintColor: '#f2f2f2',
+          headerTitleStyle: {
+            color: '#f2f2f2',
+            // fontSize:24
+          },
+          tabBarIcon: ({ color = '#535353', size, focused }) => (
             <Ionicons
               name={focused ? 'search' : 'search-outline'}
               color={color}
@@ -81,7 +97,7 @@ const Layout = () => {
         name='create'
         options={{
           title: 'Create',
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color = '#545454', size, focused }) => (
             <CreateTabIcon color={color} size={size} focused={focused} />
           ),
         }}
@@ -98,7 +114,7 @@ const Layout = () => {
         options={{
           title: 'Search',
 
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color = '#535353', size, focused }) => (
             <Ionicons
               name={focused ? 'heart' : 'heart-outline'}
               color={color}
@@ -112,7 +128,7 @@ const Layout = () => {
         options={{
           title: 'Profile',
           headerShown: false,
-          tabBarIcon: ({ color, size, focused }) => (
+          tabBarIcon: ({ color = '#535353', size, focused }) => (
             <Ionicons
               name={focused ? 'person' : 'person-outline'}
               color={color}
@@ -122,7 +138,7 @@ const Layout = () => {
           headerRight: () => {
             return (
               <TouchableOpacity onPress={() => signOut()}>
-                <Ionicons name='log-out' size={24} />
+                <Ionicons name='log-out' size={24} color={''} />
               </TouchableOpacity>
             )
           },

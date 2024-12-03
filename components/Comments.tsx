@@ -15,15 +15,23 @@ const Comments = ({ messageId }: CommentsProps) => {
   })
   return (
     <View>
-      {comments?.map(comment => (
-        <Thread
-          key={comment._id as string}
-          threadData={
-            comment as Doc<'messages'> & {
-              creator: Doc<'users'>
+      {comments?.map((comment, index) => (
+        <React.Fragment key={index}>
+          <Thread
+            key={comment._id as string}
+            threadData={
+              comment as Doc<'messages'> & {
+                creator: Doc<'users'>
+              }
             }
-          }
-        />
+          />
+          <View
+            style={{
+              height: StyleSheet.hairlineWidth,
+              backgroundColor: '#4d4d4d',
+            }}
+          />
+        </React.Fragment>
       ))}
     </View>
   )

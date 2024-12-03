@@ -3,8 +3,8 @@ import React from 'react'
 
 const Favorite = () => {
   return (
-    <View>
-      <Text>Favorite</Text>
+    <View style={{ flex: 1, backgroundColor: '#101010' }}>
+      <Text style={{ color: '#fff' }}>Favorite</Text>
     </View>
   )
 }

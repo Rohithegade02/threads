@@ -39,6 +39,7 @@ const ThreadComposer = ({
   const [mediaFiles, setMediaFiles] = useState<ImagePicker.ImagePickerAsset[]>(
     [],
   )
+  const [disableState, setDisabledState] = useState<boolean>(true)
   const addThread = useMutation(api.messages.addThreadMessage)
   const generateUploadUrl = useMutation(api.messages.generateUploadUrl)
 
@@ -123,7 +124,7 @@ const ThreadComposer = ({
       onPress={() => router.push('/(auth)/(modal)/create')}
     >
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{ flex: 1, backgroundColor: '#101010' }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
@@ -132,7 +133,7 @@ const ThreadComposer = ({
             headerRight: () => {
               return (
                 <TouchableOpacity onPress={cancelModal}>
-                  <Text>Cancel</Text>
+                  <Text style={{ color: '#f2f2f2' }}>Cancel</Text>
                 </TouchableOpacity>
               )
             },
@@ -158,6 +159,7 @@ const ThreadComposer = ({
                 multiline
                 autoFocus={!isPreview}
                 inputAccessoryViewID={inputAccessoryViewID}
+                placeholderTextColor={'#d8d8d8'}
               />
               {mediaFiles.length > 0 && (
                 <ScrollView horizontal>
@@ -186,44 +188,28 @@ const ThreadComposer = ({
                   style={styles.iconButton}
                   onPress={() => selectImage('library')}
                 >
-                  <Ionicons
-                    name='images-outline'
-                    size={24}
-                    color={Colors.border}
-                  />
+                  <Ionicons name='images-outline' size={24} color={'#4d4d4d'} />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.iconButton}
                   onPress={() => selectImage('camera')}
                 >
-                  <Ionicons
-                    name='camera-outline'
-                    size={24}
-                    color={Colors.border}
-                  />
+                  <Ionicons name='camera-outline' size={24} color={'#4d4d4d'} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconButton}>
-                  <MaterialIcons name='gif' size={24} color={Colors.border} />
+                  <MaterialIcons name='gif' size={24} color={'#4d4d4d'} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconButton}>
-                  <Ionicons
-                    name='mic-outline'
-                    size={24}
-                    color={Colors.border}
-                  />
+                  <Ionicons name='mic-outline' size={24} color={'#4d4d4d'} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconButton}>
-                  <FontAwesome6
-                    name='hashtag'
-                    size={24}
-                    color={Colors.border}
-                  />
+                  <FontAwesome6 name='hashtag' size={24} color={'#4d4d4d'} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.iconButton}>
                   <Ionicons
                     name='stats-chart-outline'
                     size={24}
-                    color={Colors.border}
+                    color={'#4d4d4d'}
                   />
                 </TouchableOpacity>
               </View>
@@ -237,7 +223,7 @@ const ThreadComposer = ({
               ]}
               onPress={removeThread}
             >
-              <Ionicons name='close' size={24} color={Colors.border} />
+              <Ionicons name='close' size={24} color={'#4d4d4d'} />
             </TouchableOpacity>
           </View>
         </View>
@@ -249,8 +235,12 @@ const ThreadComposer = ({
                 : 'Profiles that you follow can reply and quote'}
             </Text>
             <TouchableOpacity
-              onPress={handleSubmit}
-              style={styles.submitButton}
+              onPress={threadContent.length <= 0 ? undefined : handleSubmit}
+              style={
+                threadContent.length <= 0
+                  ? styles.disabledButton
+                  : styles.submitButton
+              }
             >
               <Text style={styles.submitButtonText}>Post</Text>
             </TouchableOpacity>
@@ -276,11 +266,12 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 12,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: Colors.border,
+    borderBottomColor: '#4d4d4d',
   },
   name: {
     fontWeight: 'bold',
     fontSize: 16,
+    color: '#cecfd1',
   },
   centerContainer: {
     flex: 1,
@@ -288,6 +279,7 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 16,
     maxHeight: 100,
+    color: '#505050',
   },
   iconRow: {
     flexDirection: 'row',
@@ -303,22 +295,22 @@ const styles = StyleSheet.create({
     gap: 12,
     padding: 12,
     paddingLeft: 64,
-    backgroundColor: '#fff',
+    backgroundColor: '#101010',
   },
   keyboardAccessorytext: {
     flex: 1,
-    color: Colors.border,
+    color: '#505050',
   },
   keyboardAccessoryButton: {},
   submitButton: {
-    backgroundColor: '#000',
+    backgroundColor: '#fff',
     borderRadius: 20,
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
   submitButtonText: {
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#101010',
   },
   mediaImage: {
     width: 100,
@@ -338,5 +330,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
     padding: 4,
     borderRadius: 12,
+  },
+  disabledButton: {
+    backgroundColor: '#535346',
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
 })

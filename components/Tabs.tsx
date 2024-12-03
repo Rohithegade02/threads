@@ -40,19 +40,19 @@ const styles = StyleSheet.create({
   tab: {
     alignItems: 'center',
     flex: 1,
-    borderBottomWidth: 2,
-    borderBottomColor: Colors.border,
+    borderBottomWidth: 1,
+    borderBottomColor: '#4e4e4e',
     paddingVertical: 12,
   },
   tabText: {
-    color: Colors.border,
+    color: '#4e4e4e',
   },
   activeTabText: {
-    color: 'black',
+    color: '#cecece',
     fontWeight: 'bold',
   },
   activeTab: {
-    borderBottomColor: 'black',
+    borderBottomColor: '#cecece',
   },
 })
 

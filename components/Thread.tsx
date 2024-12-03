@@ -10,7 +10,6 @@ import React from 'react'
 import { Doc } from '@/convex/_generated/dataModel'
 import { formatTime } from '@/utils/dateTime'
 import { Feather, Ionicons } from '@expo/vector-icons'
-import { Colors } from '@/constants/Colors'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Link, RelativePathString } from 'expo-router'
@@ -51,11 +50,7 @@ const Thread = ({ threadData }: ThreadProps) => {
               {formatTime(threadData._creationTime)}
             </Text>
           </View>
-          <Ionicons
-            name='ellipsis-horizontal'
-            size={24}
-            color={Colors.border}
-          />
+          <Ionicons name='ellipsis-horizontal' size={24} color={'#616161'} />
         </View>
         <Text style={styles.contentText}>{content}</Text>
         {mediaFiles && mediaFiles.length > 0 && (
@@ -84,19 +79,19 @@ const Thread = ({ threadData }: ThreadProps) => {
             style={styles.actionButton}
             onPress={() => likeThread({ threadId: threadData._id })}
           >
-            <Ionicons name='heart-outline' size={24} color='black' />
+            <Ionicons name='heart-outline' size={24} color='#616161' />
             <Text style={styles.actionText}>{likeCount}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name='chatbubble-outline' size={24} color='black' />
+            <Ionicons name='chatbubble-outline' size={24} color='#616161' />
             <Text style={styles.actionText}>{commentCount}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name='repeat-outline' size={24} color='black' />
+            <Ionicons name='repeat-outline' size={24} color='#616161' />
             <Text style={styles.actionText}>{retweetCount}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton}>
-            <Feather name='send' size={22} color='black' />
+            <Feather name='send' size={22} color='#616161' />
           </TouchableOpacity>
         </View>
       </View>
@@ -131,14 +126,16 @@ const styles = StyleSheet.create({
     marginRight: 5,
     gap: 4,
     alignItems: 'center',
+    color: '#D3D4D6',
   },
   timestamp: {
-    color: '#777',
+    color: '#4a4a4a',
     fontSize: 12,
   },
   contentText: {
     fontSize: 14,
     marginBottom: 10,
+    color: '#D3D4D6',
   },
   actions: {
     flexDirection: 'row',
@@ -153,6 +150,7 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: 12,
+    color: '#949494',
   },
   mediaImage: {
     width: 200,

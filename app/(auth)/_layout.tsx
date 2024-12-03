@@ -23,6 +23,10 @@ const Layout = () => {
           presentation: 'modal',
           title: 'New Thread',
           headerTitleAlign: 'center',
+          headerTintColor: '#f2f2f2',
+          headerStyle: {
+            backgroundColor: '#101010',
+          },
         }}
       />
       <Stack.Screen

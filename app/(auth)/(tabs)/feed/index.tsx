@@ -8,7 +8,6 @@ import React, { useEffect, useState } from 'react'
 import { usePaginatedQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { FlashList } from '@shopify/flash-list'
-import { Colors } from '@/constants/Colors'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ThreadComposer from '@/components/ThreadComposer'
 import { Image } from 'react-native'
@@ -118,12 +117,15 @@ const Feed = () => {
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
-      contentContainerStyle={{ paddingVertical: top, backgroundColor: '#fff' }}
+      contentContainerStyle={{
+        paddingVertical: top,
+        backgroundColor: '#101010',
+      }}
       ItemSeparatorComponent={() => (
         <View
           style={{
             height: StyleSheet.hairlineWidth,
-            backgroundColor: Colors.border,
+            backgroundColor: '#4d4d4d',
           }}
         />
       )}
@@ -132,6 +134,7 @@ const Feed = () => {
           <Image
             source={require('@/assets/images/threads-logo-black.png')}
             style={{ width: 40, height: 40, alignSelf: 'center' }}
+            tintColor={'#fff'}
           />
           <ThreadComposer isPreview />
         </View>

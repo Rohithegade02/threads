@@ -17,6 +17,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import { ConvexReactClient } from 'convex/react'
 import { ConvexProviderWithClerk } from 'convex/react-clerk'
 import * as Sentry from '@sentry/react-native'
+import { StatusBar } from 'expo-status-bar'
 
 const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
   unsavedChangesWarning: false,
@@ -105,6 +106,8 @@ const RootLayoutNav = () => {
     <ClerkProvider publishableKey={publishableKey!} tokenCache={tokenCache}>
       <ClerkLoaded>
         <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+          <StatusBar style='light' />
+
           <InitialLayout />
         </ConvexProviderWithClerk>
       </ClerkLoaded>

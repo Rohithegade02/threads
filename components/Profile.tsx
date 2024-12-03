@@ -58,7 +58,7 @@ const Profile = ({ userId, showBackButton }: ProfileProps) => {
           <View
             style={{
               height: StyleSheet.hairlineWidth,
-              backgroundColor: Colors.border,
+              backgroundColor: '#4d4d4d',
             }}
           />
         )}
@@ -70,16 +70,24 @@ const Profile = ({ userId, showBackButton }: ProfileProps) => {
                   style={styles.backButton}
                   onPress={() => router.back()}
                 >
-                  <Ionicons name='chevron-back' size={24} color={'#000'} />
+                  <Ionicons name='chevron-back' size={24} color={'#E2E2E2'} />
                   <Text>Back</Text>
                 </TouchableOpacity>
               ) : (
-                <MaterialCommunityIcons name='web' size={24} />
+                <MaterialCommunityIcons
+                  name='web'
+                  size={24}
+                  color={'#E2E2E2'}
+                />
               )}
               <View style={styles.headerIcons}>
-                <Ionicons name='logo-instagram' size={24} color={'#000'} />
+                <Ionicons name='logo-instagram' size={24} color={'#E2E2E2'} />
                 <TouchableOpacity onPress={() => signOut()}>
-                  <Ionicons name='log-out-outline' size={24} color={'#000'} />
+                  <Ionicons
+                    name='log-out-outline'
+                    size={24}
+                    color={'#E2E2E2'}
+                  />
                 </TouchableOpacity>
               </View>
             </View>
@@ -100,7 +108,7 @@ export default Profile
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#101010',
   },
   separator: {
     height: 1,
