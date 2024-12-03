@@ -38,7 +38,7 @@ const Page = () => {
             height: StyleSheet.hairlineWidth,
             backgroundColor: '#4d4d4d',
           }}
-        />{' '}
+        />
         <Comments messageId={id as Id<'messages'>} />
       </ScrollView>
       <View style={styles.border} />

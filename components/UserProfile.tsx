@@ -46,6 +46,7 @@ const UserProfile = ({ userId }: UserProfileProps) => {
                   imageUrl: profile?.imageUrl,
                   bioString: profile?.bio,
                   linkstring: profile?.websiteUrl,
+                  name: `${profile?.first_name + profile?.last_name!}`,
                 },
               }}
               asChild

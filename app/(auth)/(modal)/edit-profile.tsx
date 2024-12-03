@@ -15,12 +15,16 @@ import { Colors } from '@/constants/Colors'
 import * as ImagePicker from 'expo-image-picker'
 
 const EditProfile = () => {
-  const { bioString, imageUrl, linkstring, userId } = useLocalSearchParams<{
-    bioString: string
-    imageUrl: string
-    linkstring: string
-    userId: string
-  }>()
+  const { bioString, imageUrl, linkstring, userId, name } =
+    useLocalSearchParams<{
+      bioString: string
+      imageUrl: string
+      linkstring: string
+      userId: string
+      name: string
+    }>()
+
+  console.log(name)
   const [bio, setBio] = useState(bioString)
   const [selectedImage, setSelectedImage] =
     useState<ImagePicker.ImagePickerAsset | null>(null)
@@ -47,43 +51,78 @@ const EditProfile = () => {
     if (!result.canceled) setSelectedImage(result.assets[0])
   }
   return (
-    <View>
+    <View style={styles.container}>
       <Stack.Screen
         options={{
           headerRight: () => (
             <TouchableOpacity onPress={onDone}>
-              <Text>Done</Text>
+              <Text style={{ color: '#E3E5E7' }}>Done</Text>
             </TouchableOpacity>
           ),
         }}
       />
-      <TouchableOpacity onPress={pickImage}>
-        {selectedImage ? (
-          <Image source={{ uri: selectedImage.uri }} style={styles.image} />
-        ) : (
-          <Image source={{ uri: imageUrl }} style={styles.image} />
-        )}
-      </TouchableOpacity>
-      <View style={styles.section}>
-        <Text style={styles.label}>Bio</Text>
-        <TextInput
-          value={bio}
-          numberOfLines={4}
-          onChangeText={setBio}
-          style={styles.bioInput}
-          placeholder=''
-        />
-      </View>
-      <View style={styles.section}>
-        <Text style={styles.label}>Link</Text>
-        <TextInput
-          value={link}
-          numberOfLines={4}
-          onChangeText={setLink}
-          // style={styles.bioInput}
-          placeholder='https://www.example.com'
-          autoCapitalize='none'
-        />
+      <View style={styles.editContainer}>
+        <View style={styles.nameContainer}>
+          <View style={{ flex: 1 }}>
+            <Text style={{ color: '#DEE0E1', fontWeight: 600 }}>Name</Text>
+            <TextInput
+              value={name}
+              style={styles.bioInput}
+              placeholder=''
+              editable={false}
+            />
+            <View
+              style={{
+                borderWidth: StyleSheet.hairlineWidth,
+                borderColor: '#303030',
+                marginTop: -5,
+              }}
+            />
+          </View>
+          {selectedImage ? (
+            <Image source={{ uri: selectedImage.uri }} style={styles.image} />
+          ) : (
+            <Image source={{ uri: imageUrl }} style={styles.image} />
+          )}
+        </View>
+        <View>
+          <Text style={styles.label}>Bio</Text>
+          <TextInput
+            value={bio}
+            numberOfLines={4}
+            onChangeText={setBio}
+            style={styles.bioInput}
+            placeholder=''
+            autoFocus={true}
+          />
+          <View
+            style={{
+              borderWidth: StyleSheet.hairlineWidth,
+              borderColor: '#303030',
+              marginTop: -5,
+            }}
+          />
+        </View>
+        <View>
+          <Text style={styles.label}>Link</Text>
+          <TextInput
+            value={link}
+            numberOfLines={4}
+            onChangeText={setLink}
+            // style={styles.bioInput}
+            placeholder='+ Add Link'
+            placeholderTextColor={'#4b4b4b'}
+            autoCapitalize='none'
+            autoFocus={true}
+          />
+          <View
+            style={{
+              borderWidth: StyleSheet.hairlineWidth,
+              borderColor: '#303030',
+              marginTop: -5,
+            }}
+          />
+        </View>
       </View>
     </View>
   )
@@ -92,25 +131,41 @@ const EditProfile = () => {
 export default EditProfile
 
 const styles = StyleSheet.create({
-  section: {
-    margin: 16,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    borderRadius: 4,
-    padding: 8,
+  container: {
+    flex: 1,
+    backgroundColor: '#101010',
+    padding: 16,
+    justifyContent: 'center',
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 80,
-    alignSelf: 'center',
+    width: 60,
+    height: 60,
+    borderRadius: 30,
   },
   label: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: '#DEE0E1',
   },
   bioInput: {
     fontSize: 14,
     fontWeight: '500',
+    color: '#A6A6A6',
+  },
+  editContainer: {
+    backgroundColor: '#181818',
+    minHeight: 300,
+    borderWidth: 1,
+    borderColor: '#303030',
+    borderRadius: 8,
+    padding: 16,
+    gap: 20,
+  },
+  nameContainer: {
+    // flex: 1,
+    flexDirection: 'row',
+    // alignItems: 'center',
+
+    padding: 0,
   },
 })

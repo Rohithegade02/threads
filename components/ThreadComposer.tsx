@@ -159,7 +159,7 @@ const ThreadComposer = ({
                 multiline
                 autoFocus={!isPreview}
                 inputAccessoryViewID={inputAccessoryViewID}
-                placeholderTextColor={'#d8d8d8'}
+                placeholderTextColor={'#454545'}
               />
               {mediaFiles.length > 0 && (
                 <ScrollView horizontal>

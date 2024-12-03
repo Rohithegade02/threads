@@ -34,11 +34,17 @@ const Layout = () => {
         options={{
           presentation: 'modal',
           title: 'Edit Profile',
+          headerTitleStyle: {
+            color: '#E3E5E7',
+          },
+          headerStyle: {
+            backgroundColor: '#101010',
+          },
           headerTitleAlign: 'center',
           headerLeft: () => {
             return (
               <TouchableOpacity onPress={() => router.dismiss()}>
-                <Text>Cancel</Text>
+                <Text style={{ color: '#E3E5E7' }}>Cancel</Text>
               </TouchableOpacity>
             )
           },
