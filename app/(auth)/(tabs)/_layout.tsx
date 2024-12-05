@@ -2,7 +2,6 @@ import React from 'react'
 import { router, Tabs, usePathname } from 'expo-router'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { Colors } from '@/constants/Colors'
 import { useAuth } from '@clerk/clerk-expo'
 import * as Haptics from 'expo-haptics'
 
@@ -39,6 +38,7 @@ const styles = StyleSheet.create({
 const Layout = () => {
   const { signOut } = useAuth()
   const pathname = usePathname()
+  console.log('pathname', pathname)
   return (
     <Tabs
       screenOptions={{
@@ -46,14 +46,13 @@ const Layout = () => {
         tabBarActiveTintColor: '#fff',
         tabBarInactiveBackgroundColor: '#101010',
         tabBarActiveBackgroundColor: '#101010',
-
         headerStyle: {
           backgroundColor: '#101010',
         },
-        headerTintColor: '#fff',
+        headerTintColor: '#101010',
 
         tabBarStyle: pathname.includes('feed/profile/')
-          ? { display: 'none' }
+          ? { display: 'none', backgroundColor: '#101010' }
           : {
               backgroundColor: '#101010',
               borderTopWidth: 0,
@@ -132,7 +131,7 @@ const Layout = () => {
             <Ionicons
               name={focused ? 'person' : 'person-outline'}
               color={color}
-              size={28}
+              size={32}
             />
           ),
           headerRight: () => {

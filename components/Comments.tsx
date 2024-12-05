@@ -25,12 +25,14 @@ const Comments = ({ messageId }: CommentsProps) => {
               }
             }
           />
-          <View
-            style={{
-              height: StyleSheet.hairlineWidth,
-              backgroundColor: '#4d4d4d',
-            }}
-          />
+          {comments.length > index + 1 ? (
+            <View
+              style={{
+                height: StyleSheet.hairlineWidth,
+                backgroundColor: '#4d4d4d',
+              }}
+            />
+          ) : null}
         </React.Fragment>
       ))}
     </View>

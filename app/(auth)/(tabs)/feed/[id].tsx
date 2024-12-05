@@ -12,7 +12,6 @@ import Thread from '@/components/Thread'
 import { useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Doc, Id } from '@/convex/_generated/dataModel'
-import { Colors } from '@/constants/Colors'
 import { useUserProfile } from '@/hooks/useUserProfile'
 import { Image } from 'react-native'
 import Comments from '@/components/Comments'
@@ -33,12 +32,6 @@ const Page = () => {
         ) : (
           <ActivityIndicator />
         )}
-        <View
-          style={{
-            height: StyleSheet.hairlineWidth,
-            backgroundColor: '#4d4d4d',
-          }}
-        />
         <Comments messageId={id as Id<'messages'>} />
       </ScrollView>
       <View style={styles.border} />
@@ -61,7 +54,7 @@ export default Page
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000',
+    backgroundColor: '#101010',
     flex: 1,
   },
   border: {

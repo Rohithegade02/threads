@@ -13,13 +13,17 @@ const Layout = () => {
           title: 'Thread',
           headerTitleAlign: 'center',
           headerShadowVisible: false,
-          headerTintColor: '#000',
+          headerTintColor: '#f2f3f5',
           headerBackTitle: 'Back',
           headerRight: () => (
-            <Ionicons name='notifications-outline' size={24} color={'black'} />
+            <Ionicons
+              name='notifications-outline'
+              size={24}
+              color={'#f2f3f5'}
+            />
           ),
           headerStyle: {
-            backgroundColor: 'black',
+            backgroundColor: '#101010',
           },
         }}
       />

@@ -1,5 +1,6 @@
 import {
   Image,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,7 +10,7 @@ import {
 import React from 'react'
 import { Doc } from '@/convex/_generated/dataModel'
 import { formatTime } from '@/utils/dateTime'
-import { Feather, Ionicons } from '@expo/vector-icons'
+import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Link, RelativePathString } from 'expo-router'
@@ -32,7 +33,12 @@ const Thread = ({ threadData }: ThreadProps) => {
   const likeThread = useMutation(api.messages.likeThread)
   return (
     <View style={styles.container}>
-      <Image source={{ uri: creator.imageUrl }} style={styles.avatar} />
+      <View>
+        <Image source={{ uri: creator.imageUrl }} style={styles.avatar} />
+        <Pressable style={styles.downContainer}>
+          <MaterialIcons name='keyboard-arrow-down' size={16} color='#9EA0A1' />
+        </Pressable>
+      </View>
       <View style={{ flex: 1, marginLeft: 6 }}>
         <View style={styles.header}>
           <View style={styles.headerText}>
@@ -160,5 +166,13 @@ const styles = StyleSheet.create({
   },
   mediaContainer: {
     gap: 12,
+  },
+  downContainer: {
+    marginTop: -12,
+    marginLeft: 20,
+    backgroundColor: '#f3f3f3',
+    borderRadius: 20,
+    width: 16,
+    height: 16,
   },
 })
