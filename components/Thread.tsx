@@ -7,13 +7,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { Doc } from '@/convex/_generated/dataModel'
 import { formatTime } from '@/utils/dateTime'
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { Link, RelativePathString } from 'expo-router'
+import { Link, RelativePathString, usePathname } from 'expo-router'
+import { Animated } from 'react-native'
+import DropDownProfile from './DropdownProfile'
 
 type ThreadProps = {
   threadData: Doc<'messages'> & {
@@ -29,14 +31,41 @@ const Thread = ({ threadData }: ThreadProps) => {
     creator,
     content,
   } = threadData
+  const [clickArrow, setClickArrow] = useState<boolean>(false)
+  const rotation = useState(new Animated.Value(0))[0]
+
+  const toggleArrow = () => {
+    Animated.timing(rotation, {
+      toValue: clickArrow ? 0 : 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start()
+    setClickArrow(!clickArrow)
+  }
+
+  const rotateInterpolate = rotation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['0deg', '180deg'],
+  })
 
   const likeThread = useMutation(api.messages.likeThread)
   return (
     <View style={styles.container}>
       <View>
         <Image source={{ uri: creator.imageUrl }} style={styles.avatar} />
-        <Pressable style={styles.downContainer}>
-          <MaterialIcons name='keyboard-arrow-down' size={16} color='#9EA0A1' />
+        <Pressable style={styles.downContainer} onPress={toggleArrow}>
+          <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
+            <MaterialIcons
+              name='keyboard-arrow-down'
+              size={20}
+              color='#9EA0A1'
+            />
+            <DropDownProfile
+              userId={creator._id}
+              visible={clickArrow}
+              onClose={() => setClickArrow(false)}
+            />
+          </Animated.View>
         </Pressable>
       </View>
       <View style={{ flex: 1, marginLeft: 6 }}>
@@ -168,11 +197,12 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   downContainer: {
+    zIndex: 100,
     marginTop: -12,
     marginLeft: 20,
     backgroundColor: '#f3f3f3',
-    borderRadius: 20,
-    width: 16,
-    height: 16,
+    borderRadius: 24,
+    width: 20,
+    height: 20,
   },
 })

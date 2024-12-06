@@ -11,7 +11,6 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
-import { Colors } from '@/constants/Colors'
 import * as ImagePicker from 'expo-image-picker'
 
 const EditProfile = () => {
@@ -24,7 +23,6 @@ const EditProfile = () => {
       name: string
     }>()
 
-  console.log(name)
   const [bio, setBio] = useState(bioString)
   const [selectedImage, setSelectedImage] =
     useState<ImagePicker.ImagePickerAsset | null>(null)
