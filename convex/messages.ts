@@ -29,7 +29,6 @@ export const addThreadMessage = mutation({
       const user = await ctx.db.get(originalThread?.userId as Id<'users'>)
       const pushToken = user?.pushToken
       // if (!pushToken) return
-      console.log(pushToken)
       await ctx.scheduler.runAfter(1000, internal.push.sendPushNotifications, {
         pushToken: pushToken!,
         threadId: args.threadId,
@@ -88,7 +87,7 @@ export const getThreads = query({
   },
 })
 
-const getMessageCreator = async (ctx: QueryCtx, userId: Id<'users'>) => {
+export const getMessageCreator = async (ctx: QueryCtx, userId: Id<'users'>) => {
   const user = await ctx.db.get(userId)
   if (!user?.imageUrl || user.imageUrl.startsWith('http')) {
     return user
@@ -102,7 +101,7 @@ const getMessageCreator = async (ctx: QueryCtx, userId: Id<'users'>) => {
   }
 }
 
-const getMediaUrls = async (
+export const getMediaUrls = async (
   ctx: QueryCtx,
   mediaFiles: string[] | undefined,
 ) => {

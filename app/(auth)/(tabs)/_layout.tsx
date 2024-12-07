@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 const Layout = () => {
   const { signOut } = useAuth()
   const pathname = usePathname()
-  console.log('pathname', pathname)
+
   return (
     <Tabs
       screenOptions={{
@@ -131,7 +131,7 @@ const Layout = () => {
             <Ionicons
               name={focused ? 'person' : 'person-outline'}
               color={color}
-              size={32}
+              size={28}
             />
           ),
           headerRight: () => {

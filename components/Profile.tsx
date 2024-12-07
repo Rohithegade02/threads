@@ -95,7 +95,10 @@ const Profile = ({ userId, showBackButton }: ProfileProps) => {
             {!userId && userProfile && (
               <UserProfile userId={userProfile?._id} />
             )}
-            <Tabs onTabChange={() => {}} />
+            <Tabs
+              onTabChange={() => {}}
+              tabs={['Threads', 'Replies', 'Reposts']}
+            />
           </>
         }
       />

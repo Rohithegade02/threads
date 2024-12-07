@@ -13,7 +13,7 @@ import { formatTime } from '@/utils/dateTime'
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { Link, RelativePathString, usePathname } from 'expo-router'
+import { Link, RelativePathString } from 'expo-router'
 import { Animated } from 'react-native'
 import DropDownProfile from './DropdownProfile'
 

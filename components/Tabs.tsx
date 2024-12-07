@@ -4,10 +4,11 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 type TabsProps = {
   onTabChange: (tab: string) => void
+  tabs: string[]
 }
 
-const Tabs = ({ onTabChange }: TabsProps) => {
-  const [activeTab, setActiveTab] = useState('Threads')
+const Tabs = ({ onTabChange, tabs }: TabsProps) => {
+  const [activeTab, setActiveTab] = useState(tabs[0])
 
   const handleTabPress = (tab: string) => {
     setActiveTab(tab)
@@ -16,7 +17,7 @@ const Tabs = ({ onTabChange }: TabsProps) => {
 
   return (
     <View style={styles.container}>
-      {['Threads', 'Replies', 'Reposts'].map(tab => (
+      {tabs.map(tab => (
         <TouchableOpacity
           key={tab}
           style={[styles.tab, activeTab === tab && styles.activeTab]}

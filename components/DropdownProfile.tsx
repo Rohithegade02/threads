@@ -38,7 +38,6 @@ const DropDownProfile: React.FC<DropDownProfileProps> = ({
       useNativeDriver: true,
     }).start()
   }
-  console.log(userId)
   const closeModal = () => {
     Animated.timing(translateY, {
       toValue: height,

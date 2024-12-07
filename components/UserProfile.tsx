@@ -1,11 +1,12 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { useQuery } from 'convex/react'
+import React, { useCallback, useEffect, useState } from 'react'
+import { useQuery, useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useUserProfile } from '@/hooks/useUserProfile'
 import { Colors } from '@/constants/Colors'
 import { Link } from 'expo-router'
+import UnfollowModal from './UnfollowModal'
 
 type UserProfileProps = {
   userId?: string
@@ -17,6 +18,53 @@ const UserProfile = ({ userId }: UserProfileProps) => {
   })
   const { userProfile } = useUserProfile()
   const isSelf = userId === userProfile?._id
+  const followUserMutation = useMutation(api.users.followUser)
+  const unfollowUserMutation = useMutation(api.users.unfollowUser)
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const followStatus = useQuery(api.users.getFollowStatus, {
+    followerId: userProfile?._id as Id<'users'>,
+    followingId: profile?._id as Id<'users'>,
+  })
+
+  useEffect(() => {
+    if (followStatus) {
+      setIsFollowing(followStatus.isFollowing)
+    }
+  }, [followStatus])
+
+  const handleFollow = async () => {
+    try {
+      if (userProfile?._id && profile?._id) {
+        await followUserMutation({
+          followerId: userProfile._id,
+          followingId: profile._id,
+        })
+        setIsFollowing(true)
+      }
+    } catch (error) {
+      console.error('Error following user:', error)
+    }
+  }
+
+  const handleUnfollow = async () => {
+    try {
+      if (userProfile?._id && profile?._id) {
+        await unfollowUserMutation({
+          followerId: userProfile._id,
+          followingId: profile._id,
+        })
+        setIsFollowing(false)
+      }
+    } catch (error) {
+      console.error('Error unfollowing user:', error)
+    }
+  }
+
+  const handleModal = useCallback(() => {
+    setModalOpen(!modalOpen)
+  }, [])
+
   return (
     <View style={styles.container}>
       <View style={styles.profileContainer}>
@@ -62,13 +110,30 @@ const UserProfile = ({ userId }: UserProfileProps) => {
         )}
         {!isSelf && (
           <>
-            <TouchableOpacity style={styles.fullButton}>
-              <Text style={styles.fullButtonText}>Follow</Text>
-            </TouchableOpacity>
+            {isFollowing ? (
+              <TouchableOpacity style={styles.fullButton} onPress={handleModal}>
+                <Text style={styles.followingText}>Following</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={styles.followButton}
+                onPress={handleFollow}
+              >
+                <Text style={styles.followText}>Follow</Text>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity style={styles.fullButton}>
               <Text style={styles.fullButtonText}>Mention</Text>
             </TouchableOpacity>
           </>
+        )}
+        {modalOpen && (
+          <UnfollowModal
+            profile={profile}
+            visible={modalOpen}
+            onRequestClose={() => setModalOpen(false)}
+            handleUnfollow={handleUnfollow}
+          />
         )}
       </View>
     </View>
@@ -135,14 +200,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10,
+    padding: 8,
     borderWidth: 1,
-    borderColor: Colors.border,
-    backgroundColor: '#000',
-    borderRadius: 5,
+    borderColor: '#2C2C2C',
+    backgroundColor: '#101010',
+    borderRadius: 8,
   },
   fullButtonText: {
     fontWeight: 'medium',
-    color: '#fff',
+    color: '#e0e2e2',
+  },
+  followButton: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 6,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    backgroundColor: '#F4F5F7',
+    borderRadius: 8,
+  },
+  followText: {
+    color: '#616364',
+    fontWeight: '500',
+  },
+  followingText: {
+    color: '#2C2C2C',
+    fontWeight: '500',
   },
 })

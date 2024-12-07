@@ -2,12 +2,9 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Doc } from '@/convex/_generated/dataModel'
 import { Image } from 'react-native'
-import { Colors } from '@/constants/Colors'
 import { Link, RelativePathString } from 'expo-router'
 
 const ProfileSearchResult = ({ user }: { user: Doc<'users'> }) => {
-  console.log(user)
-
   return (
     <View style={styles.container}>
       <Link href={`/search/profile/${user._id}` as RelativePathString} asChild>

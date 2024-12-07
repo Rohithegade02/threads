@@ -6,6 +6,8 @@ import {
   QueryCtx,
 } from './_generated/server'
 import { Id } from './_generated/dataModel'
+import { paginationOptsValidator } from 'convex/server'
+import { getMediaUrls, getMessageCreator } from './messages'
 
 export const getUserByClerkId = query({
   args: {
@@ -173,3 +175,150 @@ async function userByExternalId(ctx: QueryCtx, externalId: string) {
     .withIndex('byClerkId', q => q.eq('clerkId', externalId))
     .unique()
 }
+
+export const followUser = mutation({
+  args: {
+    followerId: v.id('users'), // ID of the user initiating the follow
+    followingId: v.id('users'), // ID of the user to follow
+  },
+  handler: async (ctx, { followerId, followingId }) => {
+    // Prevent users from following themselves
+    if (followerId === followingId) {
+      throw new Error("Users can't follow themselves")
+    }
+
+    // Check if the follow relationship already exists using the new index
+    const existingFollow = await ctx.db
+      .query('follows')
+      .withIndex('byFollowerAndFollowing', q =>
+        q.eq('followerId', followerId).eq('followingId', followingId),
+      )
+      .unique()
+
+    if (existingFollow) {
+      throw new Error('Follow relationship already exists')
+    }
+
+    // Create a new follow relationship
+    await ctx.db.insert('follows', { followerId, followingId })
+
+    // Increment the followersCount of the followed user
+    const followedUser = await ctx.db.get(followingId)
+    if (!followedUser) {
+      throw new Error('User not found')
+    }
+    await ctx.db.patch(followingId, {
+      followersCount: followedUser.followersCount + 1,
+    })
+  },
+})
+
+export const unfollowUser = mutation({
+  args: {
+    followerId: v.id('users'),
+    followingId: v.id('users'),
+  },
+  handler: async (ctx, { followerId, followingId }) => {
+    // Find the follow relationship using the new index
+    const follow = await ctx.db
+      .query('follows')
+      .withIndex('byFollowerAndFollowing', q =>
+        q.eq('followerId', followerId).eq('followingId', followingId),
+      )
+      .unique()
+
+    if (!follow) {
+      throw new Error('Follow relationship does not exist')
+    }
+
+    // Delete the follow relationship
+    await ctx.db.delete(follow._id)
+
+    const unfollowedUser = await ctx.db.get(followingId)
+    if (!unfollowedUser) {
+      throw new Error('User not found')
+    }
+    await ctx.db.patch(followingId, {
+      followersCount: Math.max(unfollowedUser.followersCount - 1, 0),
+    })
+  },
+})
+
+export const getFollowingThreads = query({
+  args: {
+    paginationOpts: paginationOptsValidator,
+  },
+  handler: async (ctx, args) => {
+    // Get the current user
+    const currentUser = await getCurrentUserOrThrow(ctx)
+
+    // Fetch the IDs of users the current user is following
+    const following = await ctx.db
+      .query('follows')
+      .withIndex('byFollower', q => q.eq('followerId', currentUser._id))
+      .collect()
+
+    const followingIds = following.map(f => f.followingId)
+
+    if (followingIds.length === 0) {
+      return {
+        page: [],
+        isDone: true,
+      }
+    }
+
+    // Query messages from followed users using `or` for multiple conditions
+    const threadsQuery = ctx.db.query('messages').filter(q => {
+      let query = q.eq(q.field('threadId'), undefined) // Only parent threads
+      if (followingIds.length === 1) {
+        query = q.and(query, q.eq(q.field('userId'), followingIds[0]))
+      } else {
+        const conditions = followingIds.map(id => q.eq(q.field('userId'), id))
+        query = q.and(query, q.or(...conditions))
+      }
+      return query
+    })
+
+    const threads = await threadsQuery
+      .order('desc')
+      .paginate(args.paginationOpts)
+
+    // Fetch additional data for the threads
+    const threadsWithDetails = await Promise.all(
+      threads.page.map(async thread => {
+        const creator = await getMessageCreator(ctx, thread.userId)
+        const mediaUrls = await getMediaUrls(ctx, thread.mediaFiles)
+
+        return {
+          ...thread,
+          creator,
+          mediaFiles: mediaUrls,
+        }
+      }),
+    )
+
+    return {
+      ...threads,
+      page: threadsWithDetails,
+    }
+  },
+})
+
+export const getFollowStatus = query({
+  args: {
+    followerId: v.id('users'),
+    followingId: v.id('users'),
+  },
+  handler: async (ctx, { followerId, followingId }) => {
+    const follow = await ctx.db
+      .query('follows')
+      .withIndex('byFollowerAndFollowing', q =>
+        q.eq('followerId', followerId).eq('followingId', followingId),
+      )
+      .unique()
+
+    return {
+      isFollowing: !!follow,
+    }
+  },
+})

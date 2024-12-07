@@ -1,6 +1,7 @@
 import {
   RefreshControl,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
 } from 'react-native'
@@ -26,21 +27,22 @@ import Animated, {
 } from 'react-native-reanimated'
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { useIsFocused } from '@react-navigation/native'
+import Tabs from '@/components/Tabs'
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
 
 const Feed = () => {
-  const { results, loadMore } = usePaginatedQuery(
-    api.messages.getThreads,
-    {},
-    {
-      initialNumItems: 5,
-    },
-  )
+  // Queries for threads
+  const { results: forYouResults, loadMore: loadMoreForYou } =
+    usePaginatedQuery(api.messages.getThreads, {}, { initialNumItems: 5 })
+  const { results: followingResults, loadMore: loadMoreFollowing } =
+    usePaginatedQuery(api.users.getFollowingThreads, {}, { initialNumItems: 5 })
+
+  const tab = ['For you', 'Following']
   const [refreshing, setRefreshing] = useState<boolean>(false)
+  const [tabChange, setTabChange] = useState(tab[0])
   const { top } = useSafeAreaInsets()
   const pathname = usePathname()
-  //Animation
   const navigation = useNavigation()
   const scrollOffset = useSharedValue(0)
   const tabBarHeight = useBottomTabBarHeight()
@@ -79,7 +81,11 @@ const Feed = () => {
   })
 
   const onLoadMore = () => {
-    loadMore(5)
+    if (tabChange === tab[0]) {
+      loadMoreForYou(5)
+    } else {
+      loadMoreFollowing(5)
+    }
   }
 
   const onRefresh = () => {
@@ -88,9 +94,14 @@ const Feed = () => {
       setRefreshing(false)
     }, 2000)
   }
+
+  const handleTabChange = (e: string) => {
+    setTabChange(e)
+  }
+
   return (
     <AnimatedFlashList
-      data={results}
+      data={tabChange === tab[0] ? forYouResults : followingResults} // Fetch appropriate data based on tab
       onScroll={scrollHandler}
       scrollEventThrottle={16}
       showsVerticalScrollIndicator={false}
@@ -130,13 +141,14 @@ const Feed = () => {
         />
       )}
       ListHeaderComponent={
-        <View style={{ paddingBottom: 32 }}>
+        <View style={{ paddingBottom: tabChange === tab[0] ? 32 : 0 }}>
           <Image
             source={require('@/assets/images/threads-logo-black.png')}
             style={{ width: 40, height: 40, alignSelf: 'center' }}
             tintColor={'#fff'}
           />
-          <ThreadComposer isPreview />
+          <Tabs onTabChange={handleTabChange} tabs={tab} />
+          {tabChange === tab[0] && <ThreadComposer isPreview />}
         </View>
       }
     />
@@ -145,4 +157,11 @@ const Feed = () => {
 
 export default Feed
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  followingHeader: {
+    fontSize: 16,
+    color: '#fff',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+})

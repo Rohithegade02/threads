@@ -26,6 +26,11 @@ export const Message = {
   websiteUrl: v.optional(v.string()), // Optional website URL
 }
 
+export const Follow = {
+  followerId: v.id('users'), // The user who is following
+  followingId: v.id('users'), // The user being followed
+}
+
 export default defineSchema({
   users: defineTable(User)
     .index('byClerkId', ['clerkId'])
@@ -33,4 +38,8 @@ export default defineSchema({
       searchField: 'username',
     }),
   messages: defineTable(Message),
+  follows: defineTable(Follow)
+    .index('byFollower', ['followerId'])
+    .index('byFollowing', ['followingId'])
+    .index('byFollowerAndFollowing', ['followerId', 'followingId']),
 })
