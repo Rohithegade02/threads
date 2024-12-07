@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Doc } from '@/convex/_generated/dataModel'
 import { formatTime } from '@/utils/dateTime'
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
@@ -16,6 +16,7 @@ import { Link, RelativePathString } from 'expo-router'
 import { Animated } from 'react-native'
 import DropDownProfile from './DropdownProfile'
 import { Image } from 'expo-image'
+import { useUserProfile } from '@/hooks/useUserProfile'
 
 type ThreadProps = {
   threadData: Doc<'messages'> & {
@@ -33,7 +34,8 @@ const Thread = ({ threadData }: ThreadProps) => {
   } = threadData
   const [clickArrow, setClickArrow] = useState<boolean>(false)
   const rotation = useState(new Animated.Value(0))[0]
-
+  const { userProfile } = useUserProfile()
+  const isSelf = creator._id === userProfile?._id
   const toggleArrow = () => {
     Animated.timing(rotation, {
       toValue: clickArrow ? 0 : 1,
@@ -57,20 +59,24 @@ const Thread = ({ threadData }: ThreadProps) => {
           source={{ uri: creator.imageUrl }}
           style={styles.avatar}
         />
-        <Pressable style={styles.downContainer} onPress={toggleArrow}>
-          <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
-            <MaterialIcons
-              name='keyboard-arrow-down'
-              size={20}
-              color='#9EA0A1'
-            />
-            <DropDownProfile
-              userId={creator._id}
-              visible={clickArrow}
-              onClose={() => setClickArrow(false)}
-            />
-          </Animated.View>
-        </Pressable>
+        {!isSelf && (
+          <Pressable style={styles.downContainer} onPress={toggleArrow}>
+            <Animated.View
+              style={{ transform: [{ rotate: rotateInterpolate }] }}
+            >
+              <MaterialIcons
+                name='keyboard-arrow-down'
+                size={20}
+                color='#9EA0A1'
+              />
+              <DropDownProfile
+                userId={creator._id}
+                visible={clickArrow}
+                onClose={toggleArrow}
+              />
+            </Animated.View>
+          </Pressable>
+        )}
       </View>
       <View style={{ flex: 1, marginLeft: 6 }}>
         <View style={styles.header}>

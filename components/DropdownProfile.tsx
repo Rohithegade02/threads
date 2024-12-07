@@ -29,7 +29,8 @@ const DropDownProfile: React.FC<DropDownProfileProps> = ({
   const translateY = useRef(new Animated.Value(height)).current
   const profile = useQuery(api.users.getUserById, {
     userId: userId as Id<'users'>,
-  }) // Slide-up animation for modal
+  })
+
   const openModal = () => {
     Animated.timing(translateY, {
       toValue: 0,
@@ -48,7 +49,12 @@ const DropDownProfile: React.FC<DropDownProfileProps> = ({
   if (visible) openModal()
 
   return (
-    <Modal transparent visible={visible} animationType='fade'>
+    <Modal
+      transparent
+      onDismiss={closeModal}
+      visible={visible}
+      animationType='fade'
+    >
       <TouchableOpacity style={styles.overlay} onPress={closeModal} />
       <Animated.View
         style={[styles.modalContent, { transform: [{ translateY }] }]}

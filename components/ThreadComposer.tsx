@@ -234,16 +234,6 @@ const ThreadComposer = ({
                 <TouchableOpacity style={styles.iconButton}>
                   <Ionicons name='mic-outline' size={24} color={'#4d4d4d'} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.iconButton}>
-                  <FontAwesome6 name='hashtag' size={24} color={'#4d4d4d'} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.iconButton}>
-                  <Ionicons
-                    name='stats-chart-outline'
-                    size={24}
-                    color={'#4d4d4d'}
-                  />
-                </TouchableOpacity>
               </View>
             </View>
             <TouchableOpacity

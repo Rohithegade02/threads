@@ -7,6 +7,7 @@ import { useUserProfile } from '@/hooks/useUserProfile'
 import { Colors } from '@/constants/Colors'
 import { Link } from 'expo-router'
 import UnfollowModal from './UnfollowModal'
+import useFollowStore from '@/store/useFollowStore'
 
 type UserProfileProps = {
   userId?: string
@@ -20,16 +21,16 @@ const UserProfile = ({ userId }: UserProfileProps) => {
   const isSelf = userId === userProfile?._id
   const followUserMutation = useMutation(api.users.followUser)
   const unfollowUserMutation = useMutation(api.users.unfollowUser)
-  const [isFollowing, setIsFollowing] = useState(false)
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const followStatus = useQuery(api.users.getFollowStatus, {
     followerId: userProfile?._id as Id<'users'>,
     followingId: profile?._id as Id<'users'>,
   })
+  const { followStatus: isFollowing, setFollowStatus } = useFollowStore()
 
   useEffect(() => {
     if (followStatus) {
-      setIsFollowing(followStatus.isFollowing)
+      setFollowStatus(followStatus.isFollowing)
     }
   }, [followStatus])
 
@@ -40,7 +41,7 @@ const UserProfile = ({ userId }: UserProfileProps) => {
           followerId: userProfile._id,
           followingId: profile._id,
         })
-        setIsFollowing(true)
+        setFollowStatus(true)
       }
     } catch (error) {
       console.error('Error following user:', error)
@@ -54,7 +55,7 @@ const UserProfile = ({ userId }: UserProfileProps) => {
           followerId: userProfile._id,
           followingId: profile._id,
         })
-        setIsFollowing(false)
+        setFollowStatus(false)
       }
     } catch (error) {
       console.error('Error unfollowing user:', error)
