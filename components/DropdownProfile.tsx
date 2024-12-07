@@ -1,7 +1,6 @@
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useQuery } from 'convex/react'
-import { useLocalSearchParams } from 'expo-router'
 import React, { useRef } from 'react'
 import {
   View,

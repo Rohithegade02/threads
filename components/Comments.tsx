@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import React from 'react'
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useQuery } from 'convex/react'

@@ -1,4 +1,3 @@
-import { Colors } from '@/constants/Colors'
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
