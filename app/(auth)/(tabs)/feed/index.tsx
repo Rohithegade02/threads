@@ -101,65 +101,67 @@ const Feed = () => {
   }
 
   return (
-    <AnimatedFlashList
-      data={tabChange === tab[0] ? forYouResults : followingResults}
-      onScroll={scrollHandler}
-      scrollEventThrottle={16}
-      showsVerticalScrollIndicator={false}
-      renderItem={({ item }) => (
-        <Link
-          href={`/(auth)/(tabs)/feed/${item._id}` as RelativePathString}
-          asChild
-        >
-          <TouchableOpacity>
-            <Thread
-              threadData={
-                item as Doc<'messages'> & {
-                  creator: Doc<'users'>
+    <View style={{ flex: 1, backgroundColor: '#101010' }}>
+      <AnimatedFlashList
+        data={tabChange === tab[0] ? forYouResults : followingResults}
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <Link
+            href={`/(auth)/(tabs)/feed/${item._id}` as RelativePathString}
+            asChild
+          >
+            <TouchableOpacity>
+              <Thread
+                threadData={
+                  item as Doc<'messages'> & {
+                    creator: Doc<'users'>
+                  }
                 }
-              }
-            />
-          </TouchableOpacity>
-        </Link>
-      )}
-      estimatedItemSize={167}
-      keyExtractor={(item: any) => item._id}
-      onEndReachedThreshold={0.5}
-      onEndReached={onLoadMore}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      contentContainerStyle={{
-        paddingVertical: top,
-        backgroundColor: '#101010',
-      }}
-      ItemSeparatorComponent={() => (
-        <View
-          style={{
-            height: StyleSheet.hairlineWidth,
-            backgroundColor: '#4d4d4d',
-          }}
-        />
-      )}
-      ListHeaderComponent={
-        <View style={{ paddingBottom: tabChange === tab[0] ? 32 : 0 }}>
-          <Image
-            source={require('@/assets/images/threads-logo-black.png')}
-            style={{ width: 40, height: 40, alignSelf: 'center' }}
-            tintColor={'#fff'}
+              />
+            </TouchableOpacity>
+          </Link>
+        )}
+        estimatedItemSize={167}
+        keyExtractor={(item: any) => item._id}
+        onEndReachedThreshold={0.5}
+        onEndReached={onLoadMore}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        contentContainerStyle={{
+          paddingVertical: top,
+          backgroundColor: '#101010',
+        }}
+        ItemSeparatorComponent={() => (
+          <View
+            style={{
+              height: StyleSheet.hairlineWidth,
+              backgroundColor: '#4d4d4d',
+            }}
           />
-          <Tabs onTabChange={handleTabChange} tabs={tab} />
-          {tabChange === tab[0] && <ThreadComposer isPreview />}
-        </View>
-      }
-      ListEmptyComponent={() => (
-        <View style={styles.listEmpty}>
-          <Text style={styles.listEmptyText}>
-            Make sure to follow someone to get their threads here
-          </Text>
-        </View>
-      )}
-    />
+        )}
+        ListHeaderComponent={
+          <View style={{ paddingBottom: tabChange === tab[0] ? 32 : 0 }}>
+            <Image
+              source={require('@/assets/images/threads-logo-black.png')}
+              style={{ width: 40, height: 40, alignSelf: 'center' }}
+              tintColor={'#fff'}
+            />
+            <Tabs onTabChange={handleTabChange} tabs={tab} />
+            {tabChange === tab[0] && <ThreadComposer isPreview />}
+          </View>
+        }
+        ListEmptyComponent={() => (
+          <View style={styles.listEmpty}>
+            <Text style={styles.listEmptyText}>
+              Make sure to follow someone to get their threads here
+            </Text>
+          </View>
+        )}
+      />
+    </View>
   )
 }
 

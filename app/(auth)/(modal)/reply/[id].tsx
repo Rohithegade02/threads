@@ -14,9 +14,8 @@ const Page = () => {
   const thread = useQuery(api.messages.getThreadById, {
     messageId: id as Id<'messages'>,
   })
-  const { userProfile } = useUserProfile()
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#101010' }}>
       {thread ? (
         <Thread
           threadData={thread as Doc<'messages'> & { creator: Doc<'users'> }}

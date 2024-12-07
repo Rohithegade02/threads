@@ -84,12 +84,9 @@ const Layout = () => {
           presentation: 'modal',
           title: 'Reply',
           headerTitleAlign: 'center',
-          headerLeft: () => {
-            return (
-              <TouchableOpacity onPress={() => router.dismiss()}>
-                <Text>Cancel</Text>
-              </TouchableOpacity>
-            )
+          headerTintColor: '#f2f2f2',
+          headerStyle: {
+            backgroundColor: '#101010',
           },
         }}
       />
