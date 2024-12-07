@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Doc } from '@/convex/_generated/dataModel'
 import { formatTime } from '@/utils/dateTime'
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'

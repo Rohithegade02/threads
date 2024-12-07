@@ -322,3 +322,47 @@ export const getFollowStatus = query({
     }
   },
 })
+
+export const getAllUnfollowedUser = query({
+  args: {
+    userId: v.id('users'),
+  },
+  handler: async (ctx, { userId }) => {
+    // Fetch all followed users
+    const followedUsers = await ctx.db
+      .query('follows')
+      .withIndex('byFollower', q => q.eq('followerId', userId))
+      .collect()
+
+    const followedUserIds = followedUsers.map(f => f.followingId)
+
+    // Fetch all users excluding the current user
+    const allUsers = await ctx.db
+      .query('users')
+      .filter(q => q.neq(q.field('_id'), userId))
+      .collect()
+
+    // Filter out followed users
+    const unfollowedUsers = allUsers.filter(
+      user => !followedUserIds.includes(user._id),
+    )
+
+    // Add image URLs if needed
+    const usersWithImageUrls = await Promise.all(
+      unfollowedUsers.map(async user => {
+        if (!user.imageUrl || user.imageUrl.startsWith('http')) {
+          return user
+        }
+        const imageUrl = await ctx.storage.getUrl(
+          user.imageUrl as Id<'_storage'>,
+        )
+        return {
+          ...user,
+          imageUrl,
+        }
+      }),
+    )
+
+    return usersWithImageUrls
+  },
+})

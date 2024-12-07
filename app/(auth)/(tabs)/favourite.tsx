@@ -1,12 +1,48 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
+import { useUserProfile } from '@/hooks/useUserProfile'
+import { useMutation, useQuery } from 'convex/react'
+import { api } from '@/convex/_generated/api'
+import { FlashList } from '@shopify/flash-list'
+import FollowComponent from '@/components/FollowComponent'
 
 const Favorite = () => {
+  const { userProfile } = useUserProfile()
+  const unfollowedUsers = useQuery(api.users.getAllUnfollowedUser, {
+    userId: userProfile?._id!,
+  })
+
+  const followUserMutation = useMutation(api.users.followUser)
+
   return (
-    <View style={{ flex: 1, backgroundColor: '#101010' }}>
-      <Text style={{ color: '#fff' }}>Favorite</Text>
+    <View style={styles.container}>
+      <FlashList
+        data={unfollowedUsers}
+        renderItem={({ item }) => (
+          <FollowComponent
+            data={item}
+            followUserMutation={followUserMutation}
+            userProfile={userProfile}
+          />
+        )}
+        ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
+      />
     </View>
   )
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#101010',
+  },
+  itemSeparator: {
+    height: 1,
+    width: '82.5%',
+    position: 'absolute',
+    right: 10,
+    bottom: 0,
+    backgroundColor: '#1f1f1f',
+  },
+})
 export default Favorite

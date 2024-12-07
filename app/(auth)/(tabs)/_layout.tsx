@@ -111,8 +111,13 @@ const Layout = () => {
       <Tabs.Screen
         name='favourite'
         options={{
-          title: 'Search',
-
+          title: 'Activity',
+          headerTintColor: '#f2f2f2',
+          headerTitleAlign: 'left',
+          headerTitleStyle: {
+            color: '#f2f2f2',
+            fontSize: 24,
+          },
           tabBarIcon: ({ color = '#535353', size, focused }) => (
             <Ionicons
               name={focused ? 'heart' : 'heart-outline'}

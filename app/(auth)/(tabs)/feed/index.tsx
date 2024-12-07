@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   RefreshControl,
   StyleSheet,
   Text,
@@ -101,7 +102,7 @@ const Feed = () => {
 
   return (
     <AnimatedFlashList
-      data={tabChange === tab[0] ? forYouResults : followingResults} // Fetch appropriate data based on tab
+      data={tabChange === tab[0] ? forYouResults : followingResults}
       onScroll={scrollHandler}
       scrollEventThrottle={16}
       showsVerticalScrollIndicator={false}
@@ -151,6 +152,13 @@ const Feed = () => {
           {tabChange === tab[0] && <ThreadComposer isPreview />}
         </View>
       }
+      ListEmptyComponent={() => (
+        <View style={styles.listEmpty}>
+          <Text style={styles.listEmptyText}>
+            Make sure to follow someone to get their threads here
+          </Text>
+        </View>
+      )}
     />
   )
 }
@@ -163,5 +171,18 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     marginBottom: 16,
+  },
+  listEmpty: {
+    flex: 1,
+    height: 630,
+    backgroundColor: '#101010',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  listEmptyText: {
+    color: '#4d4d4d',
+    fontSize: 16,
+    textAlign: 'center',
+    width: '70%',
   },
 })

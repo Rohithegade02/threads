@@ -71,7 +71,7 @@ const Profile = ({ userId, showBackButton }: ProfileProps) => {
                   onPress={() => router.back()}
                 >
                   <Ionicons name='chevron-back' size={24} color={'#E2E2E2'} />
-                  <Text>Back</Text>
+                  <Text style={{ color: '#E2E2E2' }}>Back</Text>
                 </TouchableOpacity>
               ) : (
                 <MaterialCommunityIcons
