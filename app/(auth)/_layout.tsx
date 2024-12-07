@@ -93,6 +93,18 @@ const Layout = () => {
           },
         }}
       />
+      <Stack.Screen
+        name='(modal)/gif'
+        options={{
+          presentation: 'modal',
+          title: 'Gif',
+          headerTitleAlign: 'center',
+          headerTintColor: '#f2f2f2',
+          headerStyle: {
+            backgroundColor: '#101010',
+          },
+        }}
+      />
     </Stack>
   )
 }

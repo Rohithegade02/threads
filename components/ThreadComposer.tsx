@@ -1,6 +1,5 @@
 import {
   Alert,
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -10,23 +9,27 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Id } from '@/convex/_generated/dataModel'
-import { Stack, useRouter } from 'expo-router'
+import { Link, Stack, useRouter } from 'expo-router'
 import { useUserProfile } from '@/hooks/useUserProfile'
 import { useMutation } from 'convex/react'
 import { api } from '@/convex/_generated/api'
-import { Colors } from '@/constants/Colors'
 import { FontAwesome6, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
-import { generateUploadUrl } from '@/convex/users'
+import { generateUploadUrl } from '@/convex/users' //for edit purpose
+import { useGifStore } from '@/store/useGifStore'
+import { Image } from 'expo-image'
 
 type ThreadComposerProps = {
   isPreview?: boolean
   isReply?: boolean
   threadId?: Id<'messages'>
 }
-
+type MediaFile = {
+  uri: string
+  mimeType?: string
+}
 const ThreadComposer = ({
   isPreview,
   isReply,
@@ -36,13 +39,12 @@ const ThreadComposer = ({
   const inputAccessoryViewID = 'uniqueId'
   const [threadContent, setThreadContent] = useState('')
   const { userProfile } = useUserProfile()
-  const [mediaFiles, setMediaFiles] = useState<ImagePicker.ImagePickerAsset[]>(
-    [],
-  )
-  const [disableState, setDisabledState] = useState<boolean>(true)
+  const [mediaFiles, setMediaFiles] = useState<MediaFile[]>([])
   const addThread = useMutation(api.messages.addThreadMessage)
   const generateUploadUrl = useMutation(api.messages.generateUploadUrl)
-
+  //store
+  const selectedGif = useGifStore(state => state.selectedGif)
+  const clearSelectedGif = useGifStore(state => state.clearSelectedGif)
   const handleSubmit = async () => {
     const mediaIds = await Promise.all(mediaFiles.map(uploadMediaFile))
     addThread({
@@ -79,7 +81,7 @@ const ThreadComposer = ({
     const options: ImagePicker.ImagePickerOptions = {
       allowsEditing: true,
       aspect: [4, 3],
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
     }
 
     let result
@@ -96,19 +98,39 @@ const ThreadComposer = ({
       setMediaFiles([result.assets[0], ...mediaFiles])
     }
   }
+  const handleGifSelection = (gifUrl: string) => {
+    setMediaFiles([
+      ...mediaFiles,
+      {
+        uri: gifUrl,
+        mimeType: 'image/gif',
+      },
+    ])
+  }
 
-  const uploadMediaFile = async (image: ImagePicker.ImagePickerAsset) => {
+  useEffect(() => {
+    if (selectedGif) {
+      setMediaFiles(prev => [
+        ...prev,
+        { uri: selectedGif, mimeType: 'image/gif' },
+      ])
+      clearSelectedGif()
+    }
+  }, [selectedGif, clearSelectedGif])
+
+  const uploadMediaFile = async (file: MediaFile) => {
     const postUrl = await generateUploadUrl()
-    const response = await fetch(image!.uri)
+    const response = await fetch(file.uri)
     const blob = await response.blob()
     const result = await fetch(postUrl, {
       method: 'POST',
-      headers: { 'Content-Type': image!.mimeType! },
+      headers: { 'Content-Type': file.mimeType! },
       body: blob,
     })
     const { storageId } = await result.json()
     return storageId
   }
+
   return (
     <TouchableOpacity
       style={[
@@ -166,6 +188,7 @@ const ThreadComposer = ({
                   {mediaFiles.map((file, index) => (
                     <View style={styles.mediaContainer} key={index}>
                       <Image
+                        autoplay
                         source={{ uri: file.uri }}
                         style={styles.mediaImage}
                       />
@@ -196,9 +219,18 @@ const ThreadComposer = ({
                 >
                   <Ionicons name='camera-outline' size={24} color={'#4d4d4d'} />
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.iconButton}>
-                  <MaterialIcons name='gif' size={24} color={'#4d4d4d'} />
-                </TouchableOpacity>
+                <Link
+                  href={{
+                    pathname: '/(auth)/(modal)/gif',
+                  }}
+                  onPress={handleGifSelection}
+                  asChild
+                >
+                  <TouchableOpacity style={styles.iconButton}>
+                    <MaterialIcons name='gif' size={24} color={'#4d4d4d'} />
+                  </TouchableOpacity>
+                </Link>
+
                 <TouchableOpacity style={styles.iconButton}>
                   <Ionicons name='mic-outline' size={24} color={'#4d4d4d'} />
                 </TouchableOpacity>

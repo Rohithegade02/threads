@@ -1,5 +1,4 @@
 import {
-  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -16,6 +15,7 @@ import { api } from '@/convex/_generated/api'
 import { Link, RelativePathString } from 'expo-router'
 import { Animated } from 'react-native'
 import DropDownProfile from './DropdownProfile'
+import { Image } from 'expo-image'
 
 type ThreadProps = {
   threadData: Doc<'messages'> & {
@@ -52,7 +52,11 @@ const Thread = ({ threadData }: ThreadProps) => {
   return (
     <View style={styles.container}>
       <View>
-        <Image source={{ uri: creator.imageUrl }} style={styles.avatar} />
+        <Image
+          autoplay={true}
+          source={{ uri: creator.imageUrl }}
+          style={styles.avatar}
+        />
         <Pressable style={styles.downContainer} onPress={toggleArrow}>
           <Animated.View style={{ transform: [{ rotate: rotateInterpolate }] }}>
             <MaterialIcons
