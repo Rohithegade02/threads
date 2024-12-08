@@ -47,11 +47,13 @@ const Profile = ({ userId, showBackButton }: ProfileProps) => {
           ) : tabChange === tabs[1] ? (
             <Replies />
           ) : (
-            <View style={{ gap: 10, flex: 1, marginHorizontal: 12 }}>
-              <Loader heightStyle={220} widthStyle={true} />
-              <Loader heightStyle={220} widthStyle={true} />
-              <Loader heightStyle={220} widthStyle={true} />
-              <Loader heightStyle={220} widthStyle={true} />
+            <View
+              style={{ gap: 10, flex: 1, marginHorizontal: 12, marginTop: 20 }}
+            >
+              <Loader heightStyle={150} widthStyle={true} />
+              <Loader heightStyle={150} widthStyle={true} />
+              <Loader heightStyle={150} widthStyle={true} />
+              <Loader heightStyle={150} widthStyle={true} />
             </View>
           )
         }
