@@ -4,16 +4,17 @@ import ContentLoader, { Rect } from 'react-content-loader/native'
 interface LoaderProps {
   widthStyle?: boolean
   heightStyle: number
+  activityPage?: boolean
 }
 
-const Loader = ({ widthStyle, heightStyle }: LoaderProps) => (
+const Loader = ({ widthStyle, heightStyle, activityPage }: LoaderProps) => (
   <ContentLoader
     height={heightStyle!}
     width={undefined}
     speed={1}
     backgroundColor={'#2A2825'}
     foregroundColor={'#1E1C1A'}
-    viewBox={'0 10 100 35'}
+    viewBox={activityPage ? '10 10 100 30' : '0 10 100 35'}
     style={{ marginHorizontal: widthStyle ? 5 : 0, borderRadius: 0 }}
   >
     {/* Only SVG shapes */}

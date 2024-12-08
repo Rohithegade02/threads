@@ -26,10 +26,18 @@ const Favorite = () => {
             userProfile={userProfile}
           />
         )}
+        estimatedItemSize={72}
         ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
-        ListEmptyComponent={({ item = 5 }) => (
-          <View key={item} style={{ gap: 10, flex: 1, marginHorizontal: 12 }}>
-            <Loader heightStyle={60} widthStyle={true} />
+        ListEmptyComponent={({ item }) => (
+          <View key={item} style={{ marginHorizontal: 10 }}>
+            {[...Array(10)].map((_, index) => (
+              <Loader
+                key={index}
+                heightStyle={80}
+                widthStyle={true}
+                activityPage={true}
+              />
+            ))}
           </View>
         )}
       />
