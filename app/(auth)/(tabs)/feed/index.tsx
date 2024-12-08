@@ -29,7 +29,7 @@ import Animated, {
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { useIsFocused } from '@react-navigation/native'
 import Tabs from '@/components/Tabs'
-import Loader from '@/components/CustomLoader'
+import Loader from '@/components/Loader'
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
 

@@ -5,6 +5,7 @@ import { useMutation, useQuery } from 'convex/react'
 import { api } from '@/convex/_generated/api'
 import { FlashList } from '@shopify/flash-list'
 import FollowComponent from '@/components/FollowComponent'
+import Loader from '@/components/Loader'
 
 const Favorite = () => {
   const { userProfile } = useUserProfile()
@@ -26,6 +27,11 @@ const Favorite = () => {
           />
         )}
         ItemSeparatorComponent={() => <View style={styles.itemSeparator} />}
+        ListEmptyComponent={({ item = 5 }) => (
+          <View key={item} style={{ gap: 10, flex: 1, marginHorizontal: 12 }}>
+            <Loader heightStyle={60} widthStyle={true} />
+          </View>
+        )}
       />
     </View>
   )

@@ -13,6 +13,7 @@ import { FlashList } from '@shopify/flash-list'
 import { api } from '@/convex/_generated/api'
 import { usePaginatedQuery } from 'convex/react'
 import Thread from './Thread'
+import Loader from './Loader'
 
 type ProfileProps = {
   userId?: Id<'users'>
@@ -46,9 +47,12 @@ const Profile = ({ userId, showBackButton }: ProfileProps) => {
           ) : tabChange === tabs[1] ? (
             <Replies />
           ) : (
-            <Text style={styles.tabContentText}>
-              You haven&apos;t posted anything yet
-            </Text>
+            <View style={{ gap: 10, flex: 1, marginHorizontal: 12 }}>
+              <Loader heightStyle={220} widthStyle={true} />
+              <Loader heightStyle={220} widthStyle={true} />
+              <Loader heightStyle={220} widthStyle={true} />
+              <Loader heightStyle={220} widthStyle={true} />
+            </View>
           )
         }
         ItemSeparatorComponent={() => (
