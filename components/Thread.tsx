@@ -17,6 +17,7 @@ import { Animated } from 'react-native'
 import DropDownProfile from './DropdownProfile'
 import { Image } from 'expo-image'
 import { useUserProfile } from '@/hooks/useUserProfile'
+import SaveModalComponent from './SaveModalComponent'
 
 type ThreadProps = {
   threadData: Doc<'messages'> & {
@@ -33,6 +34,8 @@ const Thread = ({ threadData }: ThreadProps) => {
     content,
   } = threadData
   const [clickArrow, setClickArrow] = useState<boolean>(false)
+  const [clickSaveOption, setClickSaveOption] = useState<boolean>(false)
+
   const rotation = useState(new Animated.Value(0))[0]
   const { userProfile } = useUserProfile()
   const isSelf = creator._id === userProfile?._id
@@ -95,7 +98,24 @@ const Thread = ({ threadData }: ThreadProps) => {
               {formatTime(threadData._creationTime)}
             </Text>
           </View>
-          <Ionicons name='ellipsis-horizontal' size={24} color={'#616161'} />
+          {mediaFiles?.length !== 0 && (
+            <TouchableOpacity
+              onPress={() => setClickSaveOption(!clickSaveOption)}
+            >
+              <Ionicons
+                name='ellipsis-horizontal'
+                size={24}
+                color={'#616161'}
+              />
+              {clickSaveOption && (
+                <SaveModalComponent
+                  onClose={() => setClickSaveOption(false)}
+                  visible={clickSaveOption}
+                  threadData={threadData}
+                />
+              )}
+            </TouchableOpacity>
+          )}
         </View>
         <Text style={styles.contentText}>{content}</Text>
         {mediaFiles && mediaFiles.length > 0 && (

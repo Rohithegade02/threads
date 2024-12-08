@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#101010',
+    backgroundColor: '#262626',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     padding: 16,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#f2f3f5',
   },
   userHandle: {
     fontSize: 14,
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     color: '#a3a3a3',
   },
   followButton: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f2f3f5',
     paddingVertical: 10,
     borderRadius: 24,
     alignItems: 'center',
