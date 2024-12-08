@@ -66,7 +66,7 @@ const Layout = () => {
           title: 'Home',
           tabBarIcon: ({ color = '#535353', size, focused }) => (
             <MaterialIcons
-              name={focused ? 'home-filled' : 'home'}
+              name={focused ? 'home-filled' : 'home-filled'}
               color={color}
               size={28}
             />

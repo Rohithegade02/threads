@@ -29,13 +29,17 @@ import Animated, {
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 import { useIsFocused } from '@react-navigation/native'
 import Tabs from '@/components/Tabs'
+import Loader from '@/components/CustomLoader'
 
 const AnimatedFlashList = Animated.createAnimatedComponent(FlashList)
 
 const Feed = () => {
   // Queries for threads
-  const { results: forYouResults, loadMore: loadMoreForYou } =
-    usePaginatedQuery(api.messages.getThreads, {}, { initialNumItems: 5 })
+  const {
+    results: forYouResults,
+    loadMore: loadMoreForYou,
+    isLoading,
+  } = usePaginatedQuery(api.messages.getThreads, {}, { initialNumItems: 5 })
   const { results: followingResults, loadMore: loadMoreFollowing } =
     usePaginatedQuery(api.users.getFollowingThreads, {}, { initialNumItems: 5 })
 
@@ -99,7 +103,6 @@ const Feed = () => {
   const handleTabChange = (e: string) => {
     setTabChange(e)
   }
-
   return (
     <View style={{ flex: 1, backgroundColor: '#101010' }}>
       <AnimatedFlashList
@@ -143,21 +146,34 @@ const Feed = () => {
           />
         )}
         ListHeaderComponent={
-          <View style={{ paddingBottom: tabChange === tab[0] ? 32 : 0 }}>
-            <Image
-              source={require('@/assets/images/threads-logo-black.png')}
-              style={{ width: 40, height: 40, alignSelf: 'center' }}
-              tintColor={'#fff'}
-            />
-            <Tabs onTabChange={handleTabChange} tabs={tab} />
-            {tabChange === tab[0] && <ThreadComposer isPreview />}
-          </View>
+          isLoading ? (
+            <View
+              style={{
+                paddingBottom: tabChange === tab[0] ? 10 : 0,
+                marginTop: tabChange === tab[0] ? 60 : 0,
+                marginHorizontal: tabChange === tab[0] ? 16 : 0,
+              }}
+            >
+              <Loader heightStyle={180} />
+            </View>
+          ) : (
+            <View style={{ paddingBottom: tabChange === tab[0] ? 32 : 0 }}>
+              <Image
+                source={require('@/assets/images/threads-logo-black.png')}
+                style={{ width: 40, height: 40, alignSelf: 'center' }}
+                tintColor={'#fff'}
+              />
+              <Tabs onTabChange={handleTabChange} tabs={tab} />
+              {tabChange === tab[0] && <ThreadComposer isPreview />}
+            </View>
+          )
         }
-        ListEmptyComponent={() => (
-          <View style={styles.listEmpty}>
-            <Text style={styles.listEmptyText}>
-              Make sure to follow someone to get their threads here
-            </Text>
+        ListEmptyComponent={({ item = 5 }) => (
+          <View key={item} style={{ gap: 10, flex: 1, marginHorizontal: 12 }}>
+            <Loader heightStyle={220} widthStyle={true} />
+            <Loader heightStyle={220} widthStyle={true} />
+            <Loader heightStyle={220} widthStyle={true} />
+            <Loader heightStyle={220} widthStyle={true} />
           </View>
         )}
       />
@@ -167,24 +183,24 @@ const Feed = () => {
 
 export default Feed
 
-const styles = StyleSheet.create({
-  followingHeader: {
-    fontSize: 16,
-    color: '#fff',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  listEmpty: {
-    flex: 1,
-    height: 630,
-    backgroundColor: '#101010',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  listEmptyText: {
-    color: '#4d4d4d',
-    fontSize: 16,
-    textAlign: 'center',
-    width: '70%',
-  },
-})
+// const styles = StyleSheet.create({
+//   followingHeader: {
+//     fontSize: 16,
+//     color: '#fff',
+//     textAlign: 'center',
+//     marginBottom: 16,
+//   },
+//   listEmpty: {
+//     flex: 1,
+//     height: 630,
+//     backgroundColor: '#101010',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   listEmptyText: {
+//     color: '#4d4d4d',
+//     fontSize: 16,
+//     textAlign: 'center',
+//     width: '70%',
+//   },
+// })

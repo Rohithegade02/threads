@@ -141,7 +141,7 @@ const UserProfile = ({ userId }: UserProfileProps) => {
   )
 }
 
-export default UserProfile
+export default React.memo(UserProfile)
 
 const styles = StyleSheet.create({
   container: {

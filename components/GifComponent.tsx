@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { gifData } from '@/constants/gif'
 
@@ -42,4 +42,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default GifComponent
+export default memo(GifComponent)

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { memo } from 'react'
 import { Doc } from '@/convex/_generated/dataModel'
 import { Image } from 'react-native'
 import { Link, RelativePathString } from 'expo-router'
@@ -28,7 +28,7 @@ const ProfileSearchResult = ({ user }: { user: Doc<'users'> }) => {
   )
 }
 
-export default ProfileSearchResult
+export default memo(ProfileSearchResult)
 
 const styles = StyleSheet.create({
   container: {

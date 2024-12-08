@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useMemo, useState } from 'react'
+import React, { memo, useMemo, useState } from 'react'
 import { Doc, Id } from '@/convex/_generated/dataModel'
 import { useUserProfile } from '@/hooks/useUserProfile'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -100,7 +100,7 @@ const Profile = ({ userId, showBackButton }: ProfileProps) => {
   )
 }
 
-export default Profile
+export default memo(Profile)
 
 const Threads = ({
   item,

@@ -107,7 +107,7 @@ const EditProfile = () => {
             value={link}
             numberOfLines={4}
             onChangeText={setLink}
-            // style={styles.bioInput}
+            style={styles.bioInput}
             placeholder='+ Add Link'
             placeholderTextColor={'#4b4b4b'}
             autoCapitalize='none'

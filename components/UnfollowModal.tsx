@@ -1,5 +1,5 @@
 import { Modal, Pressable, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { Image } from 'react-native'
 import { Doc } from '@/convex/_generated/dataModel'
 
@@ -70,7 +70,7 @@ const UnfollowModal = ({
   )
 }
 
-export default UnfollowModal
+export default memo(UnfollowModal)
 
 const styles = StyleSheet.create({
   centeredView: {

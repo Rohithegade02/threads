@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import { Id } from '@/convex/_generated/dataModel'
 import { Link, Stack, useRouter } from 'expo-router'
 import { useUserProfile } from '@/hooks/useUserProfile'
@@ -223,7 +223,7 @@ const ThreadComposer = ({
                   href={{
                     pathname: '/(auth)/(modal)/gif',
                   }}
-                  onPress={handleGifSelection}
+                  onPress={() => handleGifSelection}
                   asChild
                 >
                   <TouchableOpacity style={styles.iconButton}>
@@ -273,7 +273,7 @@ const ThreadComposer = ({
   )
 }
 
-export default ThreadComposer
+export default memo(ThreadComposer)
 
 const styles = StyleSheet.create({
   avatar: {

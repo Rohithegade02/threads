@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { Doc } from '@/convex/_generated/dataModel'
 import { formatTime } from '@/utils/dateTime'
 import { Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
@@ -144,7 +144,7 @@ const Thread = ({ threadData }: ThreadProps) => {
   )
 }
 
-export default Thread
+export default memo(Thread)
 
 const styles = StyleSheet.create({
   container: {

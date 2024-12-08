@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 type TabsProps = {
@@ -56,4 +56,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Tabs
+export default memo(Tabs)

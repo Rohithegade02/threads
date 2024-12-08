@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import { Doc } from '@/convex/_generated/dataModel'
 import { Image } from 'react-native'
 
@@ -51,7 +51,7 @@ const FollowComponent = ({
   )
 }
 
-export default FollowComponent
+export default memo(FollowComponent)
 
 const styles = StyleSheet.create({
   container: {

@@ -1,7 +1,7 @@
 import { api } from '@/convex/_generated/api'
 import { Id } from '@/convex/_generated/dataModel'
 import { useQuery } from 'convex/react'
-import React, { useRef } from 'react'
+import React, { memo, useRef } from 'react'
 import {
   View,
   Text,
@@ -84,7 +84,7 @@ const DropDownProfile: React.FC<DropDownProfileProps> = ({
   )
 }
 
-export default DropDownProfile
+export default memo(DropDownProfile)
 
 const styles = StyleSheet.create({
   overlay: {
