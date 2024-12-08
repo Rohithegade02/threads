@@ -4,17 +4,22 @@
     "slug": "threads",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/threadicon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
+    "splash": {
+      "image": "./assets/images/threadsplash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#101010"
+    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#101010"
       },
       "package": "com.rohithegade8.threads",
       "googleServicesFile": "./google-services.json"
@@ -26,15 +31,6 @@
     },
     "plugins": [
       "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ],
       "expo-font",
       "expo-secure-store",
       [
