@@ -40,9 +40,19 @@
           "project": "threads",
           "organization": "na-cci"
         }
-      ]
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      "@react-native-firebase/messaging"
     ],
-
     "experiments": {
       "typedRoutes": true
     },
