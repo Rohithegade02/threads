@@ -38,5 +38,3 @@ yarn-error.*
 app-example
 
 .env.local
-./android
-google-services.json
